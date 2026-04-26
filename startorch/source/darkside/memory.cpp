@@ -63,7 +63,7 @@ void freeMemory(void *pointer, const startorch::Device &device) {
   case startorch::DeviceType::GPU:
     cudaFree(pointer);
     break;
-  
+
   default:
     break;
   }
@@ -85,4 +85,105 @@ void copyMemory(void *destination, void *source, uint64_t size,
   else
     cudaMemcpy(destination, source, size, cudaMemcpyDefault);
 }
+
+Storage::Storage(uint64_t size, startorch::ScalarType scalar_type,
+                 const startorch::Device &device)
+    : data_(nullptr), size_(size), scalar_type_(scalar_type), device_(device) {
+  if (size_ == 0)
+    return;
+
+  data_ = makeMemory(size_ * getScalarSize(scalar_type_), device_);
+  
+  if (data_ == nullptr)
+    size_ = 0;
+}
+
+Storage::Storage(const Storage &other)
+    : data_(nullptr), size_(other.size_), scalar_type_(other.scalar_type_),
+      device_(other.device_) {
+  if (size_ == 0)
+    return;
+  
+  data_ = makeMemory(size_ * getScalarSize(scalar_type_), device_);
+  
+  if (data_ == nullptr) {
+    size_ = 0;
+    return;
+  }
+  
+  copyMemory(data_, other.data_, size_ * getScalarSize(scalar_type_),
+             startorch::DevicePair(device_, other.device_));
+}
+
+Storage::Storage(Storage &&other) noexcept
+    : data_(other.data_), size_(other.size_), scalar_type_(other.scalar_type_),
+      device_(other.device_) {
+  other.data_ = nullptr;
+  other.size_ = 0;
+}
+
+Storage::~Storage() {
+  if (data_ != nullptr) {
+    freeMemory(data_, device_);
+  }
+}
+
+Storage &Storage::operator=(const Storage &other) {
+  if (this == &other)
+    return *this;
+
+  if (other.size_ == 0) {
+    if (size_ != 0)
+      freeMemory(data_, device_);
+
+    data_ = nullptr;
+    size_ = 0;
+    scalar_type_ = other.scalar_type_;
+    device_ = other.device_;
+    
+    return *this;
+  }
+
+  uint64_t bytes = other.size_ * getScalarSize(other.scalar_type_);
+  void *new_data = makeMemory(bytes, other.device_);
+
+  if (new_data == nullptr)
+    return *this;
+
+  if (size_ != 0)
+    freeMemory(data_, device_);
+
+  data_ = new_data;
+  size_ = other.size_;
+  scalar_type_ = other.scalar_type_;
+  device_ = other.device_;
+
+  copyMemory(data_, other.data_, bytes,
+             startorch::DevicePair(device_, other.device_));
+
+  return *this;
+}
+
+Storage &Storage::operator=(Storage &&other) noexcept {
+  if (this == &other)
+    return *this;
+
+  if (size_ != 0)
+    freeMemory(data_, device_);
+
+  data_ = other.data_;
+  size_ = other.size_;
+  scalar_type_ = other.scalar_type_;
+  device_ = other.device_;
+
+  other.data_ = nullptr;
+  other.size_ = 0;
+
+  return *this;
+}
+
+void *Storage::getData() const { return data_; }
+uint64_t Storage::getSize() const { return size_; }
+startorch::ScalarType Storage::getScalarType() const { return scalar_type_; }
+const startorch::Device &Storage::getDevice() const { return device_; }
 } // namespace darkside
