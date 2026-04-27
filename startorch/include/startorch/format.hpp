@@ -1,3 +1,5 @@
+#pragma once
+
 #include "startorch/common.hpp"
 
 #include <cstdint>
@@ -7,7 +9,7 @@ template <typename T> struct CppToScalar;
 
 #define CPP_TO_SCALAR(cpp_type, scalar_type)                                   \
   template <> struct CppToScalar<cpp_type> {                                   \
-    static constexpr ScalarType type = scalar_type;                 \
+    static constexpr ScalarType type = scalar_type;                            \
   };
 
 CPP_TO_SCALAR(int8_t, ScalarType::INT_8);
@@ -44,4 +46,4 @@ SCALAR_TO_CPP(ScalarType::UNSIGNED_INT_64, uint64_t);
 #undef SCALAR_TO_CPP
 
 uint64_t getScalarTypeSize(ScalarType scalar_type);
-} // namespace darkside
+} // namespace startorch

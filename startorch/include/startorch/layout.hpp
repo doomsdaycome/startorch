@@ -1,4 +1,7 @@
+#pragma once
+
 #include "startorch/common.hpp"
+#include "startorch/device.hpp"
 #include "startorch/memory.hpp"
 
 namespace startorch {

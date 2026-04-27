@@ -9,7 +9,7 @@ namespace startorch {
 void *makeData(uint64_t size, const Device &device);
 void freeData(void *pointer, const Device &device);
 void copyData(void *destination, void *source, uint64_t size,
-                const DevicePair &device_pair);
+              const DevicePair &device_pair);
 
 class Storage {
 private:
@@ -20,8 +20,7 @@ private:
 
 public:
   Storage() = default;
-  Storage(uint64_t size, ScalarType scalar_type,
-          const Device &device);
+  Storage(uint64_t size, ScalarType scalar_type, const Device &device);
 
   Storage(const Storage &other);
   Storage(Storage &&other) noexcept;
@@ -38,4 +37,4 @@ public:
 
   void setDevice(const Device &device);
 };
-} // namespace darkside
+} // namespace startorch

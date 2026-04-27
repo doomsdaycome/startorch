@@ -1,7 +1,9 @@
 #include "startorch/layout.hpp"
 #include "startorch/common.hpp"
+#include "startorch/device.hpp"
 #include "startorch/format.hpp"
 #include "startorch/memory.hpp"
+
 #include <cstdint>
 #include <cstring>
 
@@ -13,8 +15,9 @@ Layout::Layout(const Storage &shape, const Storage &order,
     return;
 
   uint64_t size = shape.getSize();
+  uint64_t bytes = size * getScalarTypeSize(scalar_type_);
   shape_ = shape;
-  device_ = device; 
+  device_ = device;
 
   auto is_valid = [&](const Storage &storage) {
     return (storage.getSize() == size &&
@@ -49,7 +52,7 @@ Layout::Layout(const Storage &shape, const Storage &order,
       shape_pointer = (uint64_t *)shape_.getData();
     else {
       temp_shape = Storage(size, scalar_type_, cpu_dev);
-      copyData(temp_shape.getData(), shape_.getData(), size * sizeof(uint64_t),
+      copyData(temp_shape.getData(), shape_.getData(), bytes,
                DevicePair(shape_.getDevice(), cpu_dev));
       shape_pointer = (uint64_t *)temp_shape.getData();
     }
@@ -58,7 +61,7 @@ Layout::Layout(const Storage &shape, const Storage &order,
       order_pointer = (uint64_t *)order_.getData();
     else {
       temp_order = Storage(size, scalar_type_, cpu_dev);
-      copyData(temp_order.getData(), order_.getData(), size * sizeof(uint64_t),
+      copyData(temp_order.getData(), order_.getData(), bytes,
                DevicePair(order_.getDevice(), cpu_dev));
       order_pointer = (uint64_t *)temp_order.getData();
     }
@@ -77,7 +80,7 @@ Layout::Layout(const Storage &shape, const Storage &order,
     Device offsets_init_dev =
         (device_.getDeviceType() == DeviceType::CPU) ? device_ : cpu_dev;
     offsets_ = Storage(size, scalar_type_, offsets_init_dev);
-    memset(offsets_.getData(), 0, size * sizeof(uint64_t));
+    memset(offsets_.getData(), 0, bytes);
   }
 
   shape_.setDevice(device_);
