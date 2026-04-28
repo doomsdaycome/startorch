@@ -9,6 +9,8 @@ template <typename T>
 void fillData(void *data, uint64_t size, T value,
               const startorch::Device &device);
 template <typename T>
+void fillRandomData(void *data, uint64_t size, const startorch::Device &device);
+template <typename T>
 void fillIncreaseData(void *data, uint64_t size,
                       const startorch::Device &device);
 template <typename T>

@@ -26,9 +26,10 @@ target_sources(startorch
     "source/startorch/device.cpp"
     "source/startorch/memory.cpp"
     "source/startorch/random.cpp"
-    "source/startorch/format.cpp"
 
     "source/darkside/assign.cu"
+    "source/darkside/memory.cu"
+    "source/darkside/format.cpp"
 )
 
 target_include_directories(startorch

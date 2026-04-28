@@ -1,96 +1,21 @@
 #include "startorch/memory.hpp"
 #include "startorch/common.hpp"
 #include "startorch/device.hpp"
-#include "startorch/format.hpp"
+
+#include "darkside/assign.hpp"
+#include "darkside/format.hpp"
+#include "darkside/memory.hpp"
 
 #include <cstdint>
-#include <cstring>
-#include <new>
-
-#include <cuda_runtime.h>
 
 namespace startorch {
-void *makeData(uint64_t size, const Device &device) {
-  void *pointer = nullptr;
-
-  if (device.getMemoryType() == MemoryType::PINNED) {
-    if (cudaMallocHost(&pointer, size) != cudaSuccess)
-      return nullptr;
-    return pointer;
-  }
-
-  if (device.getMemoryType() == MemoryType::UNIFIED) {
-    if (cudaMallocManaged(&pointer, size) != cudaSuccess)
-      return nullptr;
-    return pointer;
-  }
-
-  switch (device.getDeviceType()) {
-  case DeviceType::CPU:
-    pointer = new (std::nothrow) uint8_t[size];
-    break;
-
-  case DeviceType::GPU:
-    if (cudaMalloc(&pointer, size) != cudaSuccess)
-      pointer = nullptr;
-    break;
-
-  default:
-    break;
-  }
-
-  return pointer;
-}
-
-void freeData(void *pointer, const Device &device) {
-  if (pointer == nullptr)
-    return;
-
-  if (device.getMemoryType() == MemoryType::PINNED) {
-    cudaFreeHost(pointer);
-    return;
-  }
-
-  if (device.getMemoryType() == MemoryType::UNIFIED) {
-    cudaFree(pointer);
-    return;
-  }
-
-  switch (device.getDeviceType()) {
-  case DeviceType::CPU:
-    delete[] static_cast<uint8_t *>(pointer);
-    break;
-
-  case DeviceType::GPU:
-    cudaFree(pointer);
-    break;
-
-  default:
-    break;
-  }
-}
-
-void copyData(void *destination, void *source, uint64_t size,
-              const DevicePair &device_pair) {
-  if (destination == nullptr || source == nullptr || size == 0)
-    return;
-
-  DeviceType first_device_type = device_pair.getFirstDevice().getDeviceType();
-  DeviceType second_device_type = device_pair.getSecondDevice().getDeviceType();
-
-  if (first_device_type == DeviceType::CPU &&
-      second_device_type == DeviceType::CPU)
-    memcpy(destination, source, size);
-  else
-    cudaMemcpy(destination, source, size, cudaMemcpyDefault);
-}
-
 Storage::Storage(uint64_t size, ScalarType scalar_type, const Device &device)
     : size_(size), scalar_type_(scalar_type), device_(device) {
   if (size_ == 0)
     return;
 
-  data_ = makeData(size_ * getScalarTypeSize(scalar_type_), device_);
+  data_ = darkside::makeData(size_ * darkside::getScalarTypeSize(scalar_type_),
+                             device_);
 
   if (data_ == nullptr)
     size_ = 0;
@@ -102,15 +27,17 @@ Storage::Storage(const Storage &other)
   if (size_ == 0)
     return;
 
-  data_ = makeData(size_ * getScalarTypeSize(scalar_type_), device_);
+  data_ = darkside::makeData(size_ * darkside::getScalarTypeSize(scalar_type_),
+                             device_);
 
   if (data_ == nullptr) {
     size_ = 0;
     return;
   }
 
-  copyData(data_, other.data_, size_ * getScalarTypeSize(scalar_type_),
-           DevicePair(device_, other.device_));
+  darkside::copyData(data_, other.data_,
+                     size_ * darkside::getScalarTypeSize(scalar_type_),
+                     DevicePair(device_, other.device_));
 }
 
 Storage::Storage(Storage &&other) noexcept
@@ -122,7 +49,7 @@ Storage::Storage(Storage &&other) noexcept
 
 Storage::~Storage() {
   if (data_ != nullptr)
-    freeData(data_, device_);
+    darkside::freeData(data_, device_);
 }
 
 Storage &Storage::operator=(const Storage &other) {
@@ -131,7 +58,7 @@ Storage &Storage::operator=(const Storage &other) {
 
   if (other.size_ == 0) {
     if (size_ != 0)
-      freeData(data_, device_);
+      darkside::freeData(data_, device_);
 
     data_ = nullptr;
     size_ = 0;
@@ -141,21 +68,23 @@ Storage &Storage::operator=(const Storage &other) {
     return *this;
   }
 
-  uint64_t bytes = other.size_ * getScalarTypeSize(other.scalar_type_);
-  void *new_data = makeData(bytes, other.device_);
+  uint64_t bytes =
+      other.size_ * darkside::getScalarTypeSize(other.scalar_type_);
+  void *new_data = darkside::makeData(bytes, other.device_);
 
   if (new_data == nullptr)
     return *this;
 
   if (size_ != 0)
-    freeData(data_, device_);
+    darkside::freeData(data_, device_);
 
   data_ = new_data;
   size_ = other.size_;
   scalar_type_ = other.scalar_type_;
   device_ = other.device_;
 
-  copyData(data_, other.data_, bytes, DevicePair(device_, other.device_));
+  darkside::copyData(data_, other.data_, bytes,
+                     DevicePair(device_, other.device_));
 
   return *this;
 }
@@ -165,7 +94,7 @@ Storage &Storage::operator=(Storage &&other) noexcept {
     return *this;
 
   if (size_ != 0)
-    freeData(data_, device_);
+    darkside::freeData(data_, device_);
 
   data_ = other.data_;
   size_ = other.size_;
@@ -189,18 +118,178 @@ void Storage::setDevice(const Device &device) {
     return;
   }
 
-  uint64_t bytes = size_ * getScalarTypeSize(scalar_type_);
-  void *new_data = makeData(bytes, device);
+  uint64_t bytes = size_ * darkside::getScalarTypeSize(scalar_type_);
+  void *new_data = darkside::makeData(bytes, device);
 
   if (new_data == nullptr)
     return;
 
-  copyData(new_data, data_, bytes, DevicePair(device_, device));
+  darkside::copyData(new_data, data_, bytes, DevicePair(device_, device));
 
   if (data_ != nullptr)
-    freeData(data_, device_);
+    darkside::freeData(data_, device_);
 
   data_ = new_data;
   device_ = device;
 }
+
+void Storage::fillData(const ScalarToCPP &value) {
+  switch (scalar_type_) {
+  case ScalarType::INT_8:
+    darkside::fillData<int8_t>(data_, size_, value.value<int8_t>(), device_);
+    break;
+
+  case ScalarType::INT_16:
+    darkside::fillData<int16_t>(data_, size_, value.value<int16_t>(), device_);
+    break;
+
+  case ScalarType::INT_32:
+    darkside::fillData<int32_t>(data_, size_, value.value<int32_t>(), device_);
+    break;
+
+  case ScalarType::INT_64:
+    darkside::fillData<int64_t>(data_, size_, value.value<int64_t>(), device_);
+    break;
+
+  case ScalarType::FLOAT_32:
+    darkside::fillData<float>(data_, size_, value.value<float>(), device_);
+    break;
+
+  case ScalarType::FLOAT_64:
+    darkside::fillData<double>(data_, size_, value.value<double>(), device_);
+    break;
+
+  case ScalarType::UNSIGNED_INT_8:
+    darkside::fillData<uint8_t>(data_, size_, value.value<uint8_t>(), device_);
+    break;
+
+  case ScalarType::UNSIGNED_INT_16:
+    darkside::fillData<uint16_t>(data_, size_, value.value<uint16_t>(),
+                                 device_);
+    break;
+
+  case ScalarType::UNSIGNED_INT_32:
+    darkside::fillData<uint32_t>(data_, size_, value.value<uint32_t>(),
+                                 device_);
+    break;
+
+  case ScalarType::UNSIGNED_INT_64:
+    darkside::fillData<uint64_t>(data_, size_, value.value<uint64_t>(),
+                                 device_);
+    break;
+
+  default:
+    break;
+  }
+}
+
+void Storage::fillRandomData() {
+  switch (scalar_type_) {
+  case ScalarType::INT_8:
+    darkside::fillRandomData<int8_t>(data_, size_, device_);
+    break;
+  case ScalarType::INT_16:
+    darkside::fillRandomData<int16_t>(data_, size_, device_);
+    break;
+  case ScalarType::INT_32:
+    darkside::fillRandomData<int32_t>(data_, size_, device_);
+    break;
+  case ScalarType::INT_64:
+    darkside::fillRandomData<int64_t>(data_, size_, device_);
+    break;
+  case ScalarType::FLOAT_32:
+    darkside::fillRandomData<float>(data_, size_, device_);
+    break;
+  case ScalarType::FLOAT_64:
+    darkside::fillRandomData<double>(data_, size_, device_);
+    break;
+  case ScalarType::UNSIGNED_INT_8:
+    darkside::fillRandomData<uint8_t>(data_, size_, device_);
+    break;
+  case ScalarType::UNSIGNED_INT_16:
+    darkside::fillRandomData<uint16_t>(data_, size_, device_);
+    break;
+  case ScalarType::UNSIGNED_INT_32:
+    darkside::fillRandomData<uint32_t>(data_, size_, device_);
+    break;
+  case ScalarType::UNSIGNED_INT_64:
+    darkside::fillRandomData<uint64_t>(data_, size_, device_);
+    break;
+  default:
+    break;
+  }
+}
+
+void Storage::fillIncreaseData() {
+  switch (scalar_type_) {
+  case ScalarType::INT_8:
+    darkside::fillIncreaseData<int8_t>(data_, size_, device_);
+    break;
+  case ScalarType::INT_16:
+    darkside::fillIncreaseData<int16_t>(data_, size_, device_);
+    break;
+  case ScalarType::INT_32:
+    darkside::fillIncreaseData<int32_t>(data_, size_, device_);
+    break;
+  case ScalarType::INT_64:
+    darkside::fillIncreaseData<int64_t>(data_, size_, device_);
+    break;
+  case ScalarType::FLOAT_32:
+    darkside::fillIncreaseData<float>(data_, size_, device_);
+    break;
+  case ScalarType::FLOAT_64:
+    darkside::fillIncreaseData<double>(data_, size_, device_);
+    break;
+  case ScalarType::UNSIGNED_INT_8:
+    darkside::fillIncreaseData<uint8_t>(data_, size_, device_);
+    break;
+  case ScalarType::UNSIGNED_INT_16:
+    darkside::fillIncreaseData<uint16_t>(data_, size_, device_);
+    break;
+  case ScalarType::UNSIGNED_INT_32:
+    darkside::fillIncreaseData<uint32_t>(data_, size_, device_);
+    break;
+  case ScalarType::UNSIGNED_INT_64:
+    darkside::fillIncreaseData<uint64_t>(data_, size_, device_);
+    break;
+  default:
+    break;
+  }
+}
+void Storage::fillDecreaseData() {
+  switch (scalar_type_) {
+  case ScalarType::INT_8:
+    darkside::fillDecreaseData<int8_t>(data_, size_, device_);
+    break;
+  case ScalarType::INT_16:
+    darkside::fillDecreaseData<int16_t>(data_, size_, device_);
+    break;
+  case ScalarType::INT_32:
+    darkside::fillDecreaseData<int32_t>(data_, size_, device_);
+    break;
+  case ScalarType::INT_64:
+    darkside::fillDecreaseData<int64_t>(data_, size_, device_);
+    break;
+  case ScalarType::FLOAT_32:
+    darkside::fillDecreaseData<float>(data_, size_, device_);
+    break;
+  case ScalarType::FLOAT_64:
+    darkside::fillDecreaseData<double>(data_, size_, device_);
+    break;
+  case ScalarType::UNSIGNED_INT_8:
+    darkside::fillDecreaseData<uint8_t>(data_, size_, device_);
+    break;
+  case ScalarType::UNSIGNED_INT_16:
+    darkside::fillDecreaseData<uint16_t>(data_, size_, device_);
+    break;
+  case ScalarType::UNSIGNED_INT_32:
+    darkside::fillDecreaseData<uint32_t>(data_, size_, device_);
+    break;
+  case ScalarType::UNSIGNED_INT_64:
+    darkside::fillDecreaseData<uint64_t>(data_, size_, device_);
+    break;
+  default:
+    break;
+  }
+};
 } // namespace startorch

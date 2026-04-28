@@ -1,12 +1,16 @@
-#include "darkside/assign.hpp"
-#include "darkside/common.hpp"
-
 #include "startorch/common.hpp"
 #include "startorch/device.hpp"
+#include "startorch/random.hpp"
+
+#include "darkside/assign.hpp"
+#include "darkside/common.hpp"
 
 #include <algorithm>
 #include <cstdint>
 #include <cstring>
+
+#include <ctime>
+#include <curand_kernel.h>
 
 namespace darkside {
 template <typename T>
@@ -24,6 +28,27 @@ template <typename T> void fillDataCPU(T *data, uint64_t size, T value) {
     return;
   }
   std::fill_n(data, size, value);
+}
+
+template <typename T>
+__global__ void fillRandomDataGPU(T *data, uint64_t size, uint64_t seed) {
+  uint64_t id = blockIdx.x * blockDim.x + threadIdx.x;
+  if (id < size) {
+    curandState state;
+    curand_init(seed, id, 0, &state);
+
+    if constexpr (std::is_same_v<T, float>)
+      data[id] = curand_uniform(&state);
+    else if constexpr (std::is_same_v<T, double>)
+      data[id] = curand_uniform_double(&state);
+    else
+      data[id] = static_cast<T>(curand(&state));
+  }
+}
+
+template <typename T> void fillRandomDataCPU(T *data, uint64_t size) {
+  for (uint64_t i = 0; i < size; i++)
+    data[i] = pcg32_convert<T>::convert();
 }
 
 template <typename T>
@@ -91,6 +116,43 @@ template void fillData<uint32_t>(void *, uint64_t, uint32_t,
                                  const startorch::Device &);
 template void fillData<uint64_t>(void *, uint64_t, uint64_t,
                                  const startorch::Device &);
+
+
+
+template <typename T>
+void fillRandomData(void *data, uint64_t size,
+                    const startorch::Device &device) {
+  switch (device.getDeviceType()) {
+  case startorch::DeviceType::CPU:
+    fillRandomDataCPU<T>((T *)data, size);
+    break;
+
+  case startorch::DeviceType::GPU:
+    fillRandomDataGPU<T><<<BLOCKS(size), THREADS>>>((T *)data, size, time(nullptr));
+    break;
+  }
+}
+
+template void fillRandomData<int8_t>(void *, uint64_t,
+                                       const startorch::Device &);
+template void fillRandomData<int16_t>(void *, uint64_t,
+                                        const startorch::Device &);
+template void fillRandomData<int32_t>(void *, uint64_t,
+                                        const startorch::Device &);
+template void fillRandomData<int64_t>(void *, uint64_t,
+                                        const startorch::Device &);
+template void fillRandomData<float>(void *, uint64_t,
+                                      const startorch::Device &);
+template void fillRandomData<double>(void *, uint64_t,
+                                       const startorch::Device &);
+template void fillRandomData<uint8_t>(void *, uint64_t,
+                                        const startorch::Device &);
+template void fillRandomData<uint16_t>(void *, uint64_t,
+                                         const startorch::Device &);
+template void fillRandomData<uint32_t>(void *, uint64_t,
+                                         const startorch::Device &);
+template void fillRandomData<uint64_t>(void *, uint64_t,
+                                         const startorch::Device &);
 
 template <typename T>
 void fillIncreaseData(void *data, uint64_t size,
