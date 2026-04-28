@@ -72,6 +72,38 @@ uint32_t pcg32_boundedrand_r(pcg32_random_t *rng, uint32_t bound);
 
 #if __cplusplus
 }
+
+#include <cmath>
+
+template <typename T> struct pcg32_convert {
+  static T convert() { return static_cast<T>(pcg32_random()); }
+};
+
+template <> struct pcg32_convert<uint64_t> {
+  static uint64_t convert() {
+    uint64_t high = pcg32_random();
+    uint64_t low = pcg32_random();
+    return (high << 32) | low;
+  }
+};
+
+template <> struct pcg32_convert<int64_t> {
+  static int64_t convert() {
+    return static_cast<int64_t>(pcg32_convert<uint64_t>::convert());
+  }
+};
+
+template <> struct pcg32_convert<float> {
+  static float convert() { return ldexpf((float)pcg32_random(), -32); }
+};
+
+template <> struct pcg32_convert<double> {
+  static double convert() {
+    uint64_t val = pcg32_convert<uint64_t>::convert();
+    return ldexp((double)val, -64);
+  }
+};
+
 #endif
 
 #endif // PCG_BASIC_H_INCLUDED
