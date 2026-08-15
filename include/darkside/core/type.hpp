@@ -16,7 +16,7 @@ enum class ProcessingUnitType : uint8_t {
   kOptionCount = 3
 };
 
-enum class RandomAccessMemoryType : uint8_t {
+enum class AllocatorType : uint8_t {
   kUndefined = 0,
 
   kHost = 1,
@@ -45,13 +45,17 @@ enum class ScalarType : uint8_t {
   kFloat16 = 10,
   kFloat32 = 11,
   kFloat64 = 12,
+  kFloat128 = 13,
 
-  kOptionCount = 13
+  kBrainFloat16_t = 14,
+
+  kOptionCount = 15
 };
 
-using ValueType = std::variant<bool, uint8_t, uint16_t, uint32_t, uint64_t,
-                               int8_t, int16_t, int32_t, int64_t,
-                               std::float16_t, std::float32_t, std::float64_t>;
+using ValueType =
+    std::variant<bool, uint8_t, uint16_t, uint32_t, uint64_t, int8_t, int16_t,
+                 int32_t, int64_t, std::float16_t, std::float32_t,
+                 std::float64_t, std::float128_t, std::bfloat16_t>;
 
 }  // namespace darkside
 
