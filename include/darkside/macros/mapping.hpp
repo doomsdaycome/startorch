@@ -1,5 +1,5 @@
-#ifndef DARKSIDE_MACROS_EXPANSION_HPP_
-#define DARKSIDE_MACROS_EXPANSION_HPP_
+#ifndef DARKSIDE_MACROS_MAPPING_HPP_
+#define DARKSIDE_MACROS_MAPPING_HPP_
 
 namespace darkside {
 
@@ -85,4 +85,4 @@ namespace darkside {
 
 }  // namespace darkside
 
-#endif  // DARKSIDE_MACROS_EXPANSION_HPP_
+#endif  // !DARKSIDE_MACROS_MAPPING_HPP_

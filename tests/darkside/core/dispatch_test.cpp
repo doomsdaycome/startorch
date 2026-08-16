@@ -2,9 +2,9 @@
 
 #include <gtest/gtest.h>
 
-#include "darkside/core/type_traits.hpp"
+#include "darkside/core/traits.hpp"
 #include "darkside/core/types.hpp"
-#include "darkside/macros/expansion.hpp"
+#include "darkside/macros/mapping.hpp"
 
 TEST(DispatchTest, ScalarSizeTest) {
 #define TEST_DISPATCH(S)         \
