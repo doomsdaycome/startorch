@@ -1,7 +1,6 @@
 #ifndef DARKSIDE_PLATFORM_PLATFORM_HPP_
 #define DARKSIDE_PLATFORM_PLATFORM_HPP_
 
-#include <memory>
 namespace darkside {
 
 class Platform {};
