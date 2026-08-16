@@ -31,4 +31,4 @@ decltype(auto) DispatchScalarType(ScalarType scalar_type, Fn&& fn) {
 
 }  // namespace darkside
 
-#endif  // DARKSIDE_CORE_DISPATCH_HPP_
+#endif  // !DARKSIDE_CORE_DISPATCH_HPP_

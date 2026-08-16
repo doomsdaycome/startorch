@@ -1,5 +1,5 @@
-#ifndef DARKSIDE_UTILITIES_LITERALS_HPP_
-#define DARKSIDE_UTILITIES_LITERALS_HPP_
+#ifndef DARKSIDE_UTILS_LITERALS_HPP_
+#define DARKSIDE_UTILS_LITERALS_HPP_
 
 #include <cstdint>
 
@@ -19,4 +19,4 @@ constexpr std::uint64_t operator""_GiB(unsigned long long value) noexcept {
 
 }  // namespace darkside
 
-#endif  // !DARKSIDE_UTILITIES_LITERALS_HPP_
+#endif  // !DARKSIDE_UTILS_LITERALS_HPP_

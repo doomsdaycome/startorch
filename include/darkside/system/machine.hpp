@@ -1,19 +1,39 @@
-#ifndef DARKSIDE_PLATFORM_PLATFORM_HPP_
-#define DARKSIDE_PLATFORM_PLATFORM_HPP_
+#ifndef DARKSIDE_SYSTEM_MACHINE_HPP_
+#define DARKSIDE_SYSTEM_MACHINE_HPP_
+
+#include "darkside/memory/arena.hpp"
 
 namespace darkside {
 
-class Platform {};
+class Machine {};
 
-class HostPlatform : public Platform {};
+class HostMachine : public Machine {};
 
-class DevicePlatform : public Platform {};
+class DeviceMachine : public Machine {};
 
-class PlatformPair {
+class MachinePair {
  public:
+  MachinePair() = default;
+  MachinePair(const MachinePair& other) = default;
+  MachinePair(MachinePair&& other) noexcept = default;
+
+  MachinePair(Machine* first_machine, Machine* second_machine);
+
+  ~MachinePair() = default;
+
+  MachinePair& operator=(const MachinePair& other) = default;
+  MachinePair& operator=(MachinePair&& other) noexcept = default;
+
+  void CopyArena(const Arena& source_arena,
+                 const Arena& destination_arena) const;
+  void CastArena(const Arena& source_arena,
+                 const Arena& destination_arena) const;
+
  private:
+  Machine* first_machine_ = nullptr;
+  Machine* second_machine_ = nullptr;
 };
 
 }  // namespace darkside
 
-#endif  // !DARKSIDE_CORE_PLATFORM_HPP_
+#endif  // !DARKSIDE_SYSTEM_MACHINE_HPP_

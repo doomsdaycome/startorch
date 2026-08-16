@@ -30,10 +30,7 @@ class Allocator {
   Memory* memory_pointer_ = nullptr;
 };
 
-class HostAllocator : public Allocator {
- public:
-  HostAllocator() = default;
-};
+class HostAllocator : public Allocator {};
 
 class PinnedAllocator : public Allocator {};
 

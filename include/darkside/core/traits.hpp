@@ -40,4 +40,4 @@ inline constexpr ScalarType cpp_v = CppTypeTrait<C>::value;
 
 }  // namespace darkside
 
-#endif  // DARKSIDE_CORE_TRAITS_HPP_
+#endif  // !DARKSIDE_CORE_TRAITS_HPP_

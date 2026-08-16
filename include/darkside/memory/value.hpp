@@ -20,7 +20,7 @@ class Value {
 
  private:
   ValueType value_ = false;
-  Pointer* pinter_ = nullptr;
+  Pointer* pointer_ = nullptr;
 };
 
 }  // namespace darkside

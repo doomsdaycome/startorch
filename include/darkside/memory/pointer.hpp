@@ -24,8 +24,8 @@ class Pointer {
  private:
   void* pointer_ = nullptr;
   ScalarType scalar_type_ = ScalarType::kUndefined;
-  Arena* arena_pointer_ = nullptr;
   Value value_ = Value();
+  Arena* arena_pointer_ = nullptr;
 };
 
 }  // namespace darkside
