@@ -7,11 +7,29 @@
 
 namespace darkside {
 
-enum class ProcessingUnitType : uint8_t {
+enum class PlatformType : uint8_t {
+  kUndefined = 0,
+
+  kHost = 1,
+  kDevice = 2,
+
+  kOptionCount = 3
+};
+
+enum class MemoryType {
+  kUndefined = 0,
+
+  kHost = 1,
+  kDevice = 2,
+
+  kOptionCount = 3
+};
+
+enum class ProcessorType : uint8_t {
   kUndefined = 0,
 
   kCentral = 1,
-  kGraphics = 2,
+  kGraphic = 2,
 
   kOptionCount = 3
 };
