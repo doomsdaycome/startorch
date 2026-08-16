@@ -4,17 +4,17 @@
 #include <stdexcept>
 #include <utility>
 
-#include "darkside/core/type.hpp"
-#include "darkside/macro/macro.hpp"
+#include "darkside/core/types.hpp"
+#include "darkside/macros/expansion.hpp"
 
 namespace darkside {
 
 template <typename Fn>
 decltype(auto) DispatchScalarType(ScalarType scalar_type, Fn&& fn) {
   switch (scalar_type) {
-#define DARKSIDE_DISPATCH_CASE(SCALAR_TYPE, CPP_TYPE) \
-  case SCALAR_TYPE:                                   \
-    return std::forward<Fn>(fn).template operator()<CPP_TYPE>();
+#define DARKSIDE_DISPATCH_CASE(S, C) \
+  case S:                            \
+    return std::forward<Fn>(fn).template operator()<C>();
 
     DARKSIDE_FORALL_SCALAR_CPP_TYPE(DARKSIDE_DISPATCH_CASE)
 
@@ -26,8 +26,8 @@ decltype(auto) DispatchScalarType(ScalarType scalar_type, Fn&& fn) {
   }
 }
 
-#define DARKSIDE_DISPATCH_SCALAR_TYPE(TYPE, ...) \
-  DispatchScalarType(TYPE, [&]<typename scalar_t>() { __VA_ARGS__; })
+#define DARKSIDE_DISPATCH_SCALAR_TYPE(S, ...) \
+  DispatchScalarType(S, [&]<typename scalar_t>() { __VA_ARGS__; })
 
 }  // namespace darkside
 

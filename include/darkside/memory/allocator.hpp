@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "darkside/core/type.hpp"
+#include "darkside/core/types.hpp"
 #include "darkside/memory/arena.hpp"
 
 namespace darkside {

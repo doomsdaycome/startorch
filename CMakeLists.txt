@@ -6,7 +6,7 @@ if(POLICY CMP0135)
 endif()
 
 option(BUILD_SHARED_LIBS "Build startorch as a shared library" ON)
-option(BUILD_TESTS "Build startorch tests using GoogleTest" OFF)
+option(BUILD_TESTS "Build startorch tests using GoogleTest" ON)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -40,7 +40,7 @@ if(BUILD_TESTS)
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
     FetchContent_MakeAvailable(googletest)
 
-    file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp")
+    file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp")
 
     add_executable(startorch_test ${TEST_SOURCES})
     target_link_libraries(startorch_test PRIVATE startorch GTest::gtest_main)

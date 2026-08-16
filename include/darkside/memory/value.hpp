@@ -1,7 +1,7 @@
 #ifndef DARKSIDE_MEMORY_VALUE_HPP_
 #define DARKSIDE_MEMORY_VALUE_HPP_
 
-#include "darkside/core/type.hpp"
+#include "darkside/core/types.hpp"
 
 namespace darkside {
 

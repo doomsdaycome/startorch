@@ -1,8 +1,8 @@
-#ifndef DARKSIDE_CORE_TYPE_TRAIT_HPP_
-#define DARKSIDE_CORE_TYPE_TRAIT_HPP_
+#ifndef DARKSIDE_CORE_TYPE_TRAITS_HPP_
+#define DARKSIDE_CORE_TYPE_TRAITS_HPP_
 
-#include "darkside/core/type.hpp"
-#include "darkside/macro/macro.hpp"
+#include "darkside/core/types.hpp"
+#include "darkside/macros/expansion.hpp"
 
 namespace darkside {
 
@@ -16,6 +16,7 @@ struct ScalarTypeTrait;
   };
 
 DARKSIDE_FORALL_SCALAR_CPP_TYPE(DARKSIDE_DEF_SCALAR_TYPE_TRAIT)
+
 #undef DARKSIDE_DEF_SCALAR_TYPE_TRAIT
 
 template <typename C>
@@ -28,6 +29,7 @@ struct CppTypeTrait;
   };
 
 DARKSIDE_FORALL_CPP_SCALAR_TYPE(DARKSIDE_DEF_CPP_TYPE_TRAIT)
+
 #undef DARKSIDE_DEF_CPP_TYPE_TRAIT
 
 template <ScalarType S>
@@ -38,4 +40,4 @@ inline constexpr ScalarType cpp_v = CppTypeTrait<C>::value;
 
 }  // namespace darkside
 
-#endif  // DARKSIDE_CORE_TYPE_TRAIT_HPP_
+#endif  // DARKSIDE_CORE_TYPE_TRAITS_HPP_
