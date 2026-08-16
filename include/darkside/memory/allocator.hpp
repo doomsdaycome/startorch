@@ -2,34 +2,38 @@
 #define DARKSIDE_ALLOCATOR_HPP_
 
 #include <cstdint>
-#include <memory>
 
 #include "darkside/core/type.hpp"
-#include "darkside/memory/pointer.hpp"
-#include "darkside/memory/storage.hpp"
+#include "darkside/memory/arena.hpp"
 
 namespace darkside {
 
-class Platform;
+class Memory;
 
 class Allocator {
  public:
-  Allocator() = default;
-  Allocator(const Allocator& other) = default;
-  Allocator(Allocator&& other) noexcept = default;
+  Allocator() = delete;
+  Allocator(const Allocator& other) = delete;
+  Allocator(Allocator&& other) noexcept = delete;
 
-  ~Allocator() = default;
+  virtual ~Allocator();
 
-  Allocator& operator=(const Allocator& other) = default;
-  Allocator& operator=(Allocator&& other) noexcept = default;
+  Allocator& operator=(const Allocator& other) = delete;
+  Allocator& operator=(Allocator&& other) noexcept = delete;
 
- private:
-  Storage storage_ = Storage();
+  Arena NewArena(ScalarType scalar_type, uint64_t size);
+  void DeleteArena(Arena& arena);
+
+ protected:
+  Arena arena = Arena();
   uint64_t offset_ = 0ul;
-  std::weak_ptr<Platform> weak_platform_ = {};
+  Memory* memory_pointer_ = nullptr;
 };
 
-class HostAllocator : public Allocator {};
+class HostAllocator : public Allocator {
+ public:
+  HostAllocator() = default;
+};
 
 class PinnedAllocator : public Allocator {};
 

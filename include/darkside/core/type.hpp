@@ -1,5 +1,5 @@
-#ifndef DARKSIDE_CORE_TYPES_HPP_
-#define DARKSIDE_CORE_TYPES_HPP_
+#ifndef DARKSIDE_CORE_TYPE_HPP_
+#define DARKSIDE_CORE_TYPE_HPP_
 
 #include <cstdint>
 #include <stdfloat>
@@ -77,4 +77,4 @@ using ValueType =
 
 }  // namespace darkside
 
-#endif  // !DARKSIDE_CORE_TYPES_HPP_
+#endif  // !DARKSIDE_CORE_TYPE_HPP_

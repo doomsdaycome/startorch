@@ -1,20 +1,20 @@
 #ifndef DARKSIDE_MEMORY_POINTER_HPP_
 #define DARKSIDE_MEMORY_POINTER_HPP_
 
-#include <memory>
-
 #include "darkside/core/type.hpp"
 #include "darkside/memory/value.hpp"
 
 namespace darkside {
 
-class Platform;
+class Arena;
 
 class Pointer {
  public:
   Pointer() = default;
   Pointer(const Pointer& other) = default;
   Pointer(Pointer&& other) noexcept = default;
+
+  Pointer(void* pointer, ScalarType scalar_type, Arena* arena_pointer);
 
   ~Pointer() = default;
 
@@ -24,8 +24,8 @@ class Pointer {
  private:
   void* pointer_ = nullptr;
   ScalarType scalar_type_ = ScalarType::kUndefined;
+  Arena* arena_pointer_ = nullptr;
   Value value_ = Value();
-  std::shared_ptr<Platform> shared_platform_ = std::shared_ptr<Platform>();
 };
 
 }  // namespace darkside

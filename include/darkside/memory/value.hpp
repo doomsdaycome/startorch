@@ -1,8 +1,6 @@
 #ifndef DARKSIDE_MEMORY_VALUE_HPP_
 #define DARKSIDE_MEMORY_VALUE_HPP_
 
-#include <memory>
-
 #include "darkside/core/type.hpp"
 
 namespace darkside {
@@ -22,7 +20,7 @@ class Value {
 
  private:
   ValueType value_ = false;
-  std::weak_ptr<Pointer> weak_pointer_ = std::weak_ptr<Pointer>();
+  Pointer* pinter_ = nullptr;
 };
 
 }  // namespace darkside
