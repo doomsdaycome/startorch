@@ -13,13 +13,16 @@ class Value {
   Value(const Value& other) = default;
   Value(Value&& other) noexcept = default;
 
+  Value(ScalarValue scalar_value, ScalarType scalar_type, Pointer* pointer);
+
   ~Value() = default;
 
   Value& operator=(const Value& other) = default;
   Value& operator=(Value&& other) noexcept = default;
 
  private:
-  ValueType value_ = false;
+  ScalarValue scalar_value_ = false;
+  ScalarType scalar_type_ = ScalarType::kUndefined;
   Pointer* pointer_ = nullptr;
 };
 
