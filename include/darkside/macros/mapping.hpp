@@ -21,7 +21,7 @@ namespace darkside {
   MACRO(::darkside::ScalarType::kFloat64)       \
   MACRO(::darkside::ScalarType::kFloat128)      \
                                                 \
-  MACRO(::darkside::ScalarType::kBrainFloat16_t)
+  MACRO(::darkside::ScalarType::kBrainFloat16)
 
 #define DARKSIDE_FORALL_CPP_TYPE(MACRO) \
   MACRO(bool)                           \
@@ -61,7 +61,7 @@ namespace darkside {
   MACRO(::darkside::ScalarType::kFloat64, std::float64_t)   \
   MACRO(::darkside::ScalarType::kFloat128, std::float128_t) \
                                                             \
-  MACRO(::darkside::ScalarType::kBrainFloat16_t, std::bfloat16_t)
+  MACRO(::darkside::ScalarType::kBrainFloat16, std::bfloat16_t)
 
 #define DARKSIDE_FORALL_CPP_SCALAR_TYPE(MACRO)              \
   MACRO(bool, ::darkside::ScalarType::kBool)                \
@@ -81,7 +81,7 @@ namespace darkside {
   MACRO(std::float64_t, ::darkside::ScalarType::kFloat64)   \
   MACRO(std::float128_t, ::darkside::ScalarType::kFloat128) \
                                                             \
-  MACRO(std::bfloat16_t, ::darkside::ScalarType::kBrainFloat16_t)
+  MACRO(std::bfloat16_t, ::darkside::ScalarType::kBrainFloat16)
 
 }  // namespace darkside
 

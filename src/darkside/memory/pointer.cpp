@@ -1,6 +1,6 @@
 #include "darkside/memory/pointer.hpp"
 
-#include "darkside/core/types.hpp"
+#include "darkside/common/types.hpp"
 #include "darkside/memory/value.hpp"
 
 namespace darkside {

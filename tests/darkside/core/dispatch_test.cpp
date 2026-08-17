@@ -1,16 +1,47 @@
-#include "darkside/core/dispatch.hpp"
+#include "darkside/scalar/dispatch.hpp"
 
 #include <gtest/gtest.h>
 
-#include "darkside/core/traits.hpp"
-#include "darkside/core/types.hpp"
-#include "darkside/macros/mapping.hpp"
+#include <cstdint>
+#include <stdfloat>
+
+#include "darkside/common/types.hpp"
+
+using namespace std;
 
 TEST(DispatchTest, ScalarSizeTest) {
-#define TEST_DISPATCH(S)         \
-  DARKSIDE_DISPATCH_SCALAR_TYPE( \
-      S, { EXPECT_EQ(sizeof(scalar_t), sizeof(darkside::scalar_t<S>)); });
+  DARKSIDE_DISPATCH_SCALAR_TYPE(darkside::ScalarType::kBool, C,
+                                { EXPECT_EQ(sizeof(C), sizeof(bool)); })
 
-  DARKSIDE_FORALL_SCALAR_TYPE(TEST_DISPATCH)
+  DARKSIDE_DISPATCH_SCALAR_TYPE(darkside::ScalarType::kUnsignedInt8, C,
+                                { EXPECT_EQ(sizeof(C), sizeof(uint8_t)); })
+  DARKSIDE_DISPATCH_SCALAR_TYPE(darkside::ScalarType::kUnsignedInt16, C,
+                                { EXPECT_EQ(sizeof(C), sizeof(uint16_t)); })
+  DARKSIDE_DISPATCH_SCALAR_TYPE(darkside::ScalarType::kUnsignedInt32, C,
+                                { EXPECT_EQ(sizeof(C), sizeof(uint32_t)); })
+  DARKSIDE_DISPATCH_SCALAR_TYPE(darkside::ScalarType::kUnsignedInt64, C,
+                                { EXPECT_EQ(sizeof(C), sizeof(uint64_t)); })
+
+  DARKSIDE_DISPATCH_SCALAR_TYPE(darkside::ScalarType::kInt8, C,
+                                { EXPECT_EQ(sizeof(C), sizeof(int8_t)); })
+  DARKSIDE_DISPATCH_SCALAR_TYPE(darkside::ScalarType::kInt16, C,
+                                { EXPECT_EQ(sizeof(C), sizeof(int16_t)); })
+  DARKSIDE_DISPATCH_SCALAR_TYPE(darkside::ScalarType::kInt32, C,
+                                { EXPECT_EQ(sizeof(C), sizeof(int32_t)); })
+  DARKSIDE_DISPATCH_SCALAR_TYPE(darkside::ScalarType::kInt64, C,
+                                { EXPECT_EQ(sizeof(C), sizeof(int64_t)); })
+
+  DARKSIDE_DISPATCH_SCALAR_TYPE(darkside::ScalarType::kFloat16, C,
+                                { EXPECT_EQ(sizeof(C), sizeof(float16_t)); })
+  DARKSIDE_DISPATCH_SCALAR_TYPE(darkside::ScalarType::kFloat32, C,
+                                { EXPECT_EQ(sizeof(C), sizeof(float32_t)); })
+  DARKSIDE_DISPATCH_SCALAR_TYPE(darkside::ScalarType::kFloat64, C,
+                                { EXPECT_EQ(sizeof(C), sizeof(float64_t)); })
+  DARKSIDE_DISPATCH_SCALAR_TYPE(darkside::ScalarType::kFloat128, C,
+                                { EXPECT_EQ(sizeof(C), sizeof(float128_t)); })
+
+  DARKSIDE_DISPATCH_SCALAR_TYPE(darkside::ScalarType::kBrainFloat16, C,
+                                { EXPECT_EQ(sizeof(C), sizeof(bfloat16_t)); })
+
 #undef TEST_DISPATCH
 }

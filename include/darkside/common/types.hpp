@@ -1,5 +1,5 @@
-#ifndef DARKSIDE_CORE_TYPES_HPP_
-#define DARKSIDE_CORE_TYPES_HPP_
+#ifndef DARKSIDE_COMMON_TYPES_HPP_
+#define DARKSIDE_COMMON_TYPES_HPP_
 
 #include <cstdint>
 #include <stdfloat>
@@ -65,7 +65,7 @@ enum class ScalarType : uint8_t {
   kFloat64 = 12,
   kFloat128 = 13,
 
-  kBrainFloat16_t = 14,
+  kBrainFloat16 = 14,
 
   kOptionCount = 15
 };
@@ -77,4 +77,4 @@ using ValueType =
 
 }  // namespace darkside
 
-#endif  // !DARKSIDE_CORE_TYPES_HPP_
+#endif  // !DARKSIDE_COMMON_TYPES_HPP_

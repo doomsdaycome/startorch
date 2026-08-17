@@ -1,10 +1,10 @@
-#ifndef DARKSIDE_CORE_DISPATCH_HPP_
-#define DARKSIDE_CORE_DISPATCH_HPP_
+#ifndef DARKSIDE_SCALAR_DISPATCH_HPP_
+#define DARKSIDE_SCALAR_DISPATCH_HPP_
 
 #include <stdexcept>
 #include <utility>
 
-#include "darkside/core/types.hpp"
+#include "darkside/common/types.hpp"
 #include "darkside/macros/mapping.hpp"
 
 namespace darkside {
@@ -26,9 +26,9 @@ decltype(auto) DispatchScalarType(ScalarType scalar_type, Fn&& fn) {
   }
 }
 
-#define DARKSIDE_DISPATCH_SCALAR_TYPE(S, ...) \
-  DispatchScalarType(S, [&]<typename scalar_t>() { __VA_ARGS__; })
+#define DARKSIDE_DISPATCH_SCALAR_TYPE(S, C, ...) \
+  DispatchScalarType(S, [&]<typename C>() { __VA_ARGS__; });
 
 }  // namespace darkside
 
-#endif  // !DARKSIDE_CORE_DISPATCH_HPP_
+#endif  // !DARKSIDE_SCALAR_DISPATCH_HPP_

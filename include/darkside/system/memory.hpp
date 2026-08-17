@@ -1,5 +1,5 @@
-#ifndef DARKSIDE_MEMORY_MEMORY_HPP_
-#define DARKSIDE_MEMORY_MEMORY_HPP_
+#ifndef DARKSIDE_SYSTEM_MEMORY_HPP_
+#define DARKSIDE_SYSTEM_MEMORY_HPP_
 
 #include "darkside/memory/allocator.hpp"
 
@@ -16,4 +16,4 @@ class DeviceMemory : public Memory {};
 
 }  // namespace darkside
 
-#endif  // !DARKSIDE_MEMORY_MEMORY_HPP_
+#endif  // !DARKSIDE_SYSTEM_MEMORY_HPP_
