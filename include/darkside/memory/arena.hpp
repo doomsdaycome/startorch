@@ -12,20 +12,20 @@ class Allocator;
 class Arena {
  public:
   Arena() = default;
+  Arena(Arena&& other) = default;
   Arena(const Arena& other) = default;
-  Arena(Arena&& other) noexcept = default;
 
   Arena(const Pointer& pointer, uint64_t size, Allocator* allocator_pointer_);
 
   ~Arena() = default;
 
+  Arena& operator=(Arena&& other) = default;
   Arena& operator=(const Arena& other) = default;
-  Arena& operator=(Arena&& other) noexcept = default;
 
  private:
   Pointer pointer_ = Pointer();
   uint64_t size_ = 0ul;
-  Allocator* allocator_pointer_ = nullptr;
+  Allocator* allocator_raw_pointer_ = nullptr;
 };
 
 }  // namespace darkside

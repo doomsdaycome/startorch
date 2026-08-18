@@ -14,15 +14,15 @@ class DeviceMachine : public Machine {};
 class MachinePair {
  public:
   MachinePair() = default;
+  MachinePair(MachinePair&& other) = default;
   MachinePair(const MachinePair& other) = default;
-  MachinePair(MachinePair&& other) noexcept = default;
 
   MachinePair(Machine* first_machine, Machine* second_machine);
 
   ~MachinePair() = default;
 
+  MachinePair& operator=(MachinePair&& other) = default;
   MachinePair& operator=(const MachinePair& other) = default;
-  MachinePair& operator=(MachinePair&& other) noexcept = default;
 
   void CopyArena(const Arena& source_arena,
                  const Arena& destination_arena) const;

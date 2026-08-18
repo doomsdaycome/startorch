@@ -70,10 +70,10 @@ enum class ScalarType : uint8_t {
   kOptionCount = 15
 };
 
-using ScalarValue =
-    std::variant<bool, uint8_t, uint16_t, uint32_t, uint64_t, int8_t, int16_t,
-                 int32_t, int64_t, std::float16_t, std::float32_t,
-                 std::float64_t, std::float128_t, std::bfloat16_t>;
+using CPPType = std::variant<std::monostate, bool, uint8_t, uint16_t, uint32_t,
+                             uint64_t, int8_t, int16_t, int32_t, int64_t,
+                             std::float16_t, std::float32_t, std::float64_t,
+                             std::float128_t, std::bfloat16_t>;
 
 }  // namespace darkside
 

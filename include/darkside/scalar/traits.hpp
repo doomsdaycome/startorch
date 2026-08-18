@@ -9,34 +9,30 @@ namespace darkside {
 template <ScalarType S>
 struct ScalarTypeTraits;
 
-#define DARKSIDE_DEF_SCALAR_TRAIT(S, C) \
-  template <>                           \
-  struct ScalarTypeTraits<S> {          \
-    using type = C;                     \
+#define DARKSIDE_DEF_SCALAR_TYPE_TRAIT(S, C) \
+  template <>                                \
+  struct ScalarTypeTraits<S> {               \
+    using type = C;                          \
   };
-
-DARKSIDE_FORALL_SCALAR_CPP_TYPE(DARKSIDE_DEF_SCALAR_TRAIT)
-
+DARKSIDE_FORALL_SCALAR_CPP_TYPE(DARKSIDE_DEF_SCALAR_TYPE_TRAIT)
 #undef DARKSIDE_DEF_SCALAR_TRAIT
 
 template <typename C>
 struct CppTypeTraits;
 
-#define DARKSIDE_DEF_CPP_TRAIT(C, S)       \
-  template <>                              \
-  struct CppTypeTraits<C> {                \
-    static constexpr ScalarType value = S; \
+#define DARKSIDE_DEF_CPP_TYPE_TRAIT(C, S) \
+  template <>                             \
+  struct CppTypeTraits<C> {               \
+    static constexpr ScalarType type = S; \
   };
-
-DARKSIDE_FORALL_CPP_SCALAR_TYPE(DARKSIDE_DEF_CPP_TRAIT)
-
+DARKSIDE_FORALL_CPP_SCALAR_TYPE(DARKSIDE_DEF_CPP_TYPE_TRAIT)
 #undef DARKSIDE_DEF_CPP_TRAIT
 
 template <ScalarType S>
 using scalar_t = typename ScalarTypeTraits<S>::type;
 
 template <typename C>
-inline constexpr ScalarType cpp_v = CppTypeTraits<C>::value;
+inline constexpr ScalarType cpp_t = CppTypeTraits<C>::type;
 
 }  // namespace darkside
 
