@@ -27,13 +27,6 @@ target_include_directories(
          $<INSTALL_INTERFACE:include>
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-if(MSVC)
-  target_compile_options(startorch PRIVATE /W4 /permissive-)
-else()
-  target_compile_options(startorch PRIVATE -Wall -Wextra -Wpedantic
-                                           -Wconversion)
-endif()
-
 if(BUILD_TESTS)
   enable_testing()
   include(FetchContent)
@@ -46,6 +39,7 @@ if(BUILD_TESTS)
   set(gtest_force_shared_crt
       ON
       CACHE BOOL "" FORCE)
+
   FetchContent_MakeAvailable(googletest)
 
   file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS
@@ -64,8 +58,7 @@ if(BUILD_EXAMPLES)
        "${CMAKE_CURRENT_SOURCE_DIR}/examples/*.cpp")
 
   foreach(EXAMPLE_FILE ${EXAMPLE_SOURCES})
-    cmake_path(GET EXAMPLE_FILE STEM EXAMPLE_TARGET_NAME)
-
+    get_filename_component(EXAMPLE_TARGET_NAME ${EXAMPLE_FILE} NAME_WE)
     add_executable(${EXAMPLE_TARGET_NAME} ${EXAMPLE_FILE})
     target_link_libraries(${EXAMPLE_TARGET_NAME} PRIVATE startorch::startorch)
   endforeach()

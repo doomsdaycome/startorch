@@ -68,7 +68,7 @@ vcpkg_installed/
 Testing/
 .cache/
 
-# editor
+# Editor configs
 .vscode/
 .clang-format
 .clangd
