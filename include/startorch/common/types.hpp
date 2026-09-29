@@ -57,4 +57,4 @@ using CppType =
 
 } // namespace startorch
 
-#endif // STARTORCH_COMMON_TYPES_HPP_
+#endif // !STARTORCH_COMMON_TYPES_HPP_
