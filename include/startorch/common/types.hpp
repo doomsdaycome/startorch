@@ -42,18 +42,19 @@ enum class ScalarType : uint8_t {
 #endif
 };
 
-using CppType =
-    std::variant<std::monostate, bool, uint8_t, uint16_t, uint32_t, uint64_t,
-                 int8_t, int16_t, int32_t, int64_t
+using CppType = std::variant<std::monostate, bool, std::uint8_t, std::uint16_t,
+                             std::uint32_t, std::uint64_t, std::int8_t,
+                             std::int16_t, std::int32_t, std::int64_t
 
 #if defined(__STDCPP_FLOAT16_T__)
-                 ,
-                 float16_t, float32_t, float64_t, float128_t, bfloat16_t
+                             ,
+                             std::float16_t, std::float32_t, std::float64_t,
+                             std::float128_t, std::bfloat16_t
 #else
-                 ,
-                 float, double
+                             ,
+                             float, double
 #endif
-                 >;
+                             >;
 
 } // namespace startorch
 
