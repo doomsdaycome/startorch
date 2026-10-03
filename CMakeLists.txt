@@ -19,11 +19,12 @@ target_sources(
     startorch
     PRIVATE
         src/darkside/memory/allocator.cpp
-        src/darkside/memory/arena.cpp
-        src/startorch/scalar/value.cpp
+        src/darkside/memory/buffer.cpp
+        src/startorch/engine/memory.cpp
+        src/startorch/engine/system.cpp
         src/startorch/scalar/pointer.cpp
-        src/startorch/system/machine.cpp
-        src/startorch/system/memory.cpp
+        src/startorch/scalar/reference.cpp
+        src/startorch/scalar/value.cpp
 )
 
 target_include_directories(

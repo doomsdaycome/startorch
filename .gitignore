@@ -70,5 +70,3 @@ Testing/
 
 # Editor configs
 .vscode/
-.clang-format
-.clangd

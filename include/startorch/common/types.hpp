@@ -10,7 +10,36 @@
 
 namespace startorch {
 
-enum class ScalarType : uint8_t {
+enum class SystemType : std::uint8_t {
+  kUndefined = 0,
+
+  kHost = 1,
+  kDevice = 2,
+
+  kOptionCount = 3
+};
+
+enum class MemoryType : std::uint8_t {
+  kUndefined = 0,
+
+  kHost = 1,
+  kDevice = 2,
+
+  kOptionmCount = 3,
+};
+
+enum class BufferType : std::uint8_t {
+  kUndefined = 0,
+
+  kHost = 1,
+  kDevice = 2,
+  kPinned = 3,
+  kUnified = 4,
+
+  kOptionmCount = 5,
+};
+
+enum class ScalarType : std::uint8_t {
   kUndefined = 0,
 
   kBool = 1,
