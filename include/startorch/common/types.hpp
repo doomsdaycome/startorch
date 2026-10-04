@@ -19,15 +19,6 @@ enum class SystemType : std::uint8_t {
   kOptionCount = 3
 };
 
-enum class MemoryType : std::uint8_t {
-  kUndefined = 0,
-
-  kHost = 1,
-  kDevice = 2,
-
-  kOptionmCount = 3,
-};
-
 enum class BufferType : std::uint8_t {
   kUndefined = 0,
 

@@ -2,31 +2,18 @@
 #define DARKSIDE_MEMORY_ALLOCATOR_HPP_
 
 #include <cstdint>
-#include <vector>
 
 #include "darkside/memory/buffer.hpp"
 #include "startorch/common/types.hpp"
 
-namespace startorch {
-
-class Memory;
-
-} // namespace startorch
-
 namespace darkside {
-
-struct FreeBlock {
-  std::uint64_t start_offset;
-  std::uint64_t bytes;
-};
 
 class Allocator {
 public:
   Allocator() = default;
   Allocator(Allocator &&other) noexcept;
   Allocator(const Allocator &other) = delete;
-  Allocator(std::uint64_t bytes, startorch::BufferType buffer_type,
-            startorch::Memory &memory);
+  Allocator(std::uint64_t bytes, startorch::BufferType buffer_type);
 
   ~Allocator();
 
@@ -40,8 +27,6 @@ public:
   const Buffer &GetBuffer() const;
   std::uint64_t GetOffset() const;
   std::uint64_t GetAlignedSize() const;
-  startorch::Memory &GetMemory();
-  const startorch::Memory &GetMemory() const;
 
   bool IsNull() const;
 
@@ -52,8 +37,6 @@ private:
   Buffer buffer_ = Buffer();
   std::uint64_t offset_ = 0ul;
   std::uint64_t aligned_size_ = 0ul;
-  startorch::Memory *memory_data_ = nullptr;
-  std::vector<FreeBlock> free_blocks_ = std::vector<FreeBlock>();
 };
 
 } // namespace darkside

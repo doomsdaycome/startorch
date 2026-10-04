@@ -7,19 +7,16 @@
 
 namespace darkside {
 
-class Allocator;
-
 class Buffer {
 public:
   Buffer() = default;
-  Buffer(Buffer &&other) noexcept;
+  Buffer(Buffer &&other) noexcept = default;
   Buffer(const Buffer &other) = delete;
-  Buffer(void *data, std::uint64_t bytes, startorch::BufferType type,
-         Allocator &allocator);
+  Buffer(void *data, std::uint64_t bytes, startorch::BufferType type);
 
   ~Buffer() = default;
 
-  Buffer &operator=(Buffer &&other) noexcept;
+  Buffer &operator=(Buffer &&other) noexcept = default;
   Buffer &operator=(const Buffer &other) = delete;
 
   explicit operator bool() const;
@@ -29,8 +26,6 @@ public:
   const void *GetData() const;
   std::uint64_t GetBytes() const;
   startorch::BufferType GetType() const;
-  Allocator &GetAllocator();
-  const Allocator &GetAllocator() const;
 
   bool IsNull() const;
 
@@ -38,7 +33,6 @@ private:
   void *data_ = nullptr;
   std::uint64_t bytes_ = 0ul;
   startorch::BufferType type_ = startorch::BufferType::kUndefined;
-  Allocator *allocator_data_ = nullptr;
 };
 
 } // namespace darkside

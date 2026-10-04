@@ -19,8 +19,8 @@ if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
     set(CMAKE_CUDA_ARCHITECTURES "native")
 endif()
 
-option(BUILD_SHARED_LIBS "Build startorch as a shared library" OFF)
-option(BUILD_TESTS "Build startorch unit tests" OFF)
+option(BUILD_SHARED_LIBS "Build startorch as a shared library" ON)
+option(BUILD_TESTS "Build startorch unit tests" ON)
 option(BUILD_EXAMPLES "Build startorch example binaries" OFF)
 
 add_library(startorch)
@@ -29,6 +29,7 @@ add_library(startorch::startorch ALIAS startorch)
 target_sources(
     startorch
     PRIVATE
+        src/darkside/memory/allocator.cpp
         src/darkside/memory/buffer.cpp
         src/darkside/scalar/utilities.cpp
         src/startorch/engine/memory.cpp
@@ -77,7 +78,7 @@ if(BUILD_TESTS)
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
     FetchContent_MakeAvailable(googletest)
 
-    add_executable(startorch_test tests/test_tensor.cpp)
+    add_executable(startorch_test tests/test_memory.cpp)
 
     target_link_libraries(
         startorch_test

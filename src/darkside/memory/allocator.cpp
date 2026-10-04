@@ -1,6 +1,5 @@
 #include "darkside/memory/allocator.hpp"
 
-#include <algorithm>
 #include <cstdint>
 #include <new>
 #include <utility>
@@ -10,22 +9,19 @@
 
 #include "darkside/memory/buffer.hpp"
 #include "startorch/common/types.hpp"
-#include "startorch/engine/memory.hpp"
 
 namespace darkside {
 
 Allocator::Allocator(Allocator &&other) noexcept
     : buffer_(std::move(other.buffer_)), offset_(other.offset_),
-      aligned_size_(other.aligned_size_), memory_data_(other.memory_data_) {
+      aligned_size_(other.aligned_size_) {
   other.buffer_ = Buffer();
   other.offset_ = 0ul;
   other.aligned_size_ = 0ul;
-  other.memory_data_ = nullptr;
 }
 
-Allocator::Allocator(std::uint64_t bytes, startorch::BufferType buffer_type,
-                     startorch::Memory &memory) {
-  if (!bytes || buffer_type == startorch::BufferType::kUndefined || !memory)
+Allocator::Allocator(std::uint64_t bytes, startorch::BufferType buffer_type) {
+  if (!bytes || buffer_type == startorch::BufferType::kUndefined)
     return;
 
   void *data = nullptr;
@@ -55,14 +51,16 @@ Allocator::Allocator(std::uint64_t bytes, startorch::BufferType buffer_type,
     break;
 
   default:
+    aligned_size_ = 64ul;
     break;
   }
 
-  if (data == nullptr)
+  if (data == nullptr) {
+    aligned_size_ = 0ul;
     return;
+  }
 
-  buffer_ = Buffer(data, bytes, buffer_type, *this);
-  memory_data_ = &memory;
+  buffer_ = Buffer(data, bytes, buffer_type);
 }
 
 Allocator::~Allocator() {
@@ -96,44 +94,43 @@ Allocator &Allocator::operator=(Allocator &&other) noexcept {
     buffer_ = std::move(other.buffer_);
     offset_ = other.offset_;
     aligned_size_ = other.aligned_size_;
-    memory_data_ = other.memory_data_;
 
     other.buffer_ = Buffer();
     other.offset_ = 0ul;
     other.aligned_size_ = 0ul;
-    other.memory_data_ = nullptr;
   }
 
   return *this;
 }
 
-Allocator::operator bool() const { return buffer_ && *memory_data_; }
-bool Allocator::operator!() const { return !(*this); }
+Allocator::operator bool() const { return !buffer_.IsNull(); }
+bool Allocator::operator!() const { return buffer_.IsNull(); }
 
 Buffer &Allocator::GetBuffer() { return buffer_; }
 const Buffer &Allocator::GetBuffer() const { return buffer_; }
 std::uint64_t Allocator::GetOffset() const { return offset_; }
 std::uint64_t Allocator::GetAlignedSize() const { return aligned_size_; }
-startorch::Memory &Allocator::GetMemory() { return *memory_data_; }
-const startorch::Memory &Allocator::GetMemory() const { return *memory_data_; }
+
 bool Allocator::IsNull() const { return !(*this); }
 
 Buffer Allocator::NewBuffer(std::uint64_t bytes) {
-  if (bytes == 0ul || !buffer_)
+  if (!bytes || !buffer_)
     return Buffer();
 
   std::uint64_t aligned_offset =
       (offset_ + aligned_size_ - 1ul) & ~(aligned_size_ - 1ul);
+  std::uint64_t aligned_bytes =
+      (bytes + aligned_size_ - 1ul) & ~(aligned_size_ - 1ul);
 
-  if (aligned_offset + bytes > buffer_.GetBytes())
+  if (aligned_offset + aligned_bytes > buffer_.GetBytes())
     return Buffer();
 
   std::uint8_t *data = static_cast<std::uint8_t *>(buffer_.GetData());
   void *new_data = static_cast<void *>(data + aligned_offset);
 
-  offset_ = aligned_offset + bytes;
+  offset_ = aligned_offset + aligned_bytes;
 
-  return Buffer(new_data, bytes, buffer_.GetType(), *this);
+  return Buffer(new_data, bytes, buffer_.GetType());
 }
 
 void Allocator::DeleteBuffer(const Buffer &buffer) {
@@ -147,32 +144,11 @@ void Allocator::DeleteBuffer(const Buffer &buffer) {
     return;
 
   std::uint64_t aligned_offset = static_cast<std::uint64_t>(old_data - data);
-  std::uint64_t bytes = buffer.GetBytes();
+  std::uint64_t aligned_bytes =
+      (buffer.GetBytes() + aligned_size_ - 1ul) & ~(aligned_size_ - 1ul);
 
-  if (aligned_offset + bytes == offset_) {
+  if (aligned_offset + aligned_bytes == offset_)
     offset_ = aligned_offset;
-
-    while (!free_blocks_.empty() &&
-           free_blocks_.back().start_offset + free_blocks_.back().bytes ==
-               offset_) {
-      offset_ = free_blocks_.back().start_offset;
-      free_blocks_.pop_back();
-    }
-
-    if (free_blocks_.empty() && offset_ <= aligned_size_)
-      offset_ = 0ul;
-  } else {
-    auto it = std::lower_bound(free_blocks_.begin(), free_blocks_.end(),
-                               aligned_offset,
-                               [](const FreeBlock &block, std::uint64_t value) {
-                                 return block.start_offset < value;
-                               });
-
-    if (it != free_blocks_.end() && it->start_offset == aligned_offset)
-      return;
-
-    free_blocks_.insert(it, {aligned_offset, bytes});
-  }
 }
 
 } // namespace darkside
