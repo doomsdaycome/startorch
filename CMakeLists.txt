@@ -13,6 +13,8 @@ set(CMAKE_CUDA_EXTENSIONS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+find_package(CUDAToolkit REQUIRED)
+
 if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
     set(CMAKE_CUDA_ARCHITECTURES "native")
 endif()
@@ -43,6 +45,8 @@ target_include_directories(
         $<INSTALL_INTERFACE:include>
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
+
+target_link_libraries(startorch PRIVATE CUDA::cudart)
 
 set_target_properties(
     startorch

@@ -20,6 +20,9 @@ template <typename Fn>
 decltype(auto) DispatchScalarType(startorch::ScalarType scalar_type, Fn &&fn) {
   switch (scalar_type) {
     DARKSIDE_FORALL_SCALAR_TYPE_TO_CPP_TYPE(DARKSIDE_DISPATCH_SCALAR_TYPE_CASE)
+
+  default:
+    break;
   }
 
   std::unreachable();
