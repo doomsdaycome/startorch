@@ -28,8 +28,6 @@ Memory::Memory(std::uint64_t physical_bytes, std::uint64_t virtual_bytes,
   case SystemType::kOptionCount:
     return;
   }
-
-  system_type_ = system_type;
 }
 
 Memory::operator bool() const {

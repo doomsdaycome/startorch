@@ -27,6 +27,16 @@ enum class BufferType : std::uint8_t {
   kPinned = 3,
   kUnified = 4,
 
+};
+
+enum class BridgeType : std::uint8_t {
+  kUndefined = 0,
+
+  kHostToHost = 1,
+  kHostToDevice = 2,
+  kDeviceToHost = 3,
+  kDeviceToDevice = 4,
+
   kOptionmCount = 5,
 };
 

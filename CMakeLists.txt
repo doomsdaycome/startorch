@@ -21,7 +21,7 @@ endif()
 
 option(BUILD_SHARED_LIBS "Build startorch as a shared library" ON)
 option(BUILD_TESTS "Build startorch unit tests" ON)
-option(BUILD_EXAMPLES "Build startorch example binaries" OFF)
+option(BUILD_EXAMPLES "Build startorch example binaries" ON)
 
 add_library(startorch)
 add_library(startorch::startorch ALIAS startorch)
@@ -32,6 +32,7 @@ target_sources(
     src/darkside/memory/allocator.cpp
     src/darkside/memory/buffer.cpp
     src/darkside/scalar/utilities.cpp
+    src/startorch/engine/bridge.cpp
     src/startorch/engine/memory.cpp
     src/startorch/engine/system.cpp
     src/startorch/scalar/pointer.cpp
@@ -60,7 +61,7 @@ if(BUILD_SHARED_LIBS)
 endif()
 
 if(BUILD_EXAMPLES)
-  add_executable(startorch_example examples/main.cpp)
+  add_executable(startorch_example examples/example.cpp)
   target_link_libraries(startorch_example PRIVATE startorch::startorch)
 endif()
 
@@ -77,7 +78,7 @@ if(BUILD_TESTS)
   set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
   FetchContent_MakeAvailable(googletest)
 
-  add_executable(startorch_test tests/test_memory.cpp)
+  add_executable(startorch_test tests/memory_test.cpp tests/engine_test.cpp)
 
   target_link_libraries(
     startorch_test

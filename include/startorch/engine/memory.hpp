@@ -34,7 +34,6 @@ public:
 private:
   darkside::Allocator physical_allocator_ = darkside::Allocator();
   darkside::Allocator virtual_allocator_ = darkside::Allocator();
-  SystemType system_type_ = SystemType::kUndefined;
 };
 
 } // namespace startorch
