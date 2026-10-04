@@ -1,5 +1,6 @@
 #include "darkside/memory/allocator.hpp"
 
+#include <algorithm>
 #include <cstdint>
 #include <new>
 #include <utility>
@@ -150,31 +151,27 @@ void Allocator::DeleteBuffer(const Buffer &buffer) {
 
   if (aligned_offset + bytes == offset_) {
     offset_ = aligned_offset;
-    bool reclaimed = true;
 
-    while (reclaimed && !free_blocks_.empty()) {
-      reclaimed = false;
-
-      for (auto it = free_blocks_.begin(); it != free_blocks_.end(); ++it) {
-        if (it->start_offset + it->bytes == offset_) {
-          offset_ = it->start_offset;
-          free_blocks_.erase(it);
-          reclaimed = true;
-          break;
-        }
-      }
+    while (!free_blocks_.empty() &&
+           free_blocks_.back().start_offset + free_blocks_.back().bytes ==
+               offset_) {
+      offset_ = free_blocks_.back().start_offset;
+      free_blocks_.pop_back();
     }
 
-    if (free_blocks_.empty() && offset_ <= aligned_size_) {
+    if (free_blocks_.empty() && offset_ <= aligned_size_)
       offset_ = 0ul;
-    }
   } else {
-    for (const auto &block : free_blocks_) {
-      if (block.start_offset == aligned_offset) {
-        return;
-      }
-    }
-    free_blocks_.push_back({aligned_offset, bytes});
+    auto it = std::lower_bound(free_blocks_.begin(), free_blocks_.end(),
+                               aligned_offset,
+                               [](const FreeBlock &block, std::uint64_t value) {
+                                 return block.start_offset < value;
+                               });
+
+    if (it != free_blocks_.end() && it->start_offset == aligned_offset)
+      return;
+
+    free_blocks_.insert(it, {aligned_offset, bytes});
   }
 }
 
