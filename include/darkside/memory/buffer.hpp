@@ -10,13 +10,13 @@ namespace darkside {
 class Buffer {
 public:
   Buffer() = default;
-  Buffer(Buffer &&other);
+  Buffer(Buffer &&other) noexcept;
   Buffer(const Buffer &other) = delete;
   Buffer(void *data, std::uint64_t bytes, startorch::BufferType type);
 
   ~Buffer() = default;
 
-  Buffer &operator=(Buffer &&other);
+  Buffer &operator=(Buffer &&other) noexcept;
   Buffer &operator=(const Buffer &other) = delete;
 
   void *GetData();

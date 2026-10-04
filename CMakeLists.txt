@@ -27,8 +27,8 @@ add_library(startorch::startorch ALIAS startorch)
 target_sources(
     startorch
     PRIVATE
-        src/darkside/kernel/allocator.cu
         src/darkside/memory/buffer.cpp
+        src/darkside/scalar/utilities.cpp
         src/startorch/engine/memory.cpp
         src/startorch/engine/system.cpp
         src/startorch/scalar/pointer.cpp

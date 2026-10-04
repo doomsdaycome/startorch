@@ -97,7 +97,9 @@
   MACRO(::startorch::ScalarType::kFloat64, std::float64_t)                     \
   MACRO(::startorch::ScalarType::kFloat128, std::float128_t)                   \
                                                                                \
-  MACRO(::startorch::ScalarType::kBrainFloat16, std::bfloat16_t)
+  MACRO(::startorch::ScalarType::kBrainFloat16, std::bfloat16_t)               \
+                                                                               \
+  MACRO(::startorch::ScalarType::kOptionCount, std::monostate)
 #else
 #define DARKSIDE_FORALL_SCALAR_TYPE_TO_CPP_TYPE(MACRO)                         \
   MACRO(::startorch::ScalarType::kUndefined, std::monostate)                   \
@@ -114,7 +116,9 @@
   MACRO(::startorch::ScalarType::kInt64, std::int64_t)                         \
                                                                                \
   MACRO(::startorch::ScalarType::kFloat32, float)                              \
-  MACRO(::startorch::ScalarType::kFloat64, double)
+  MACRO(::startorch::ScalarType::kFloat64, double)                             \
+                                                                               \
+  MACRO(::startorch::ScalarType::kOptionCount, std::monostate)
 #endif
 
 #if defined(__STDCPP_FLOAT16_T__)

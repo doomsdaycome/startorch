@@ -6,7 +6,7 @@
 
 namespace darkside {
 
-Buffer::Buffer(Buffer &&other)
+Buffer::Buffer(Buffer &&other) noexcept
     : data_(other.data_), bytes_(other.bytes_), type_(other.type_) {
   other.data_ = nullptr;
   other.bytes_ = 0ul;
@@ -23,7 +23,7 @@ Buffer::Buffer(void *data, std::uint64_t bytes, startorch::BufferType type)
   }
 }
 
-Buffer &Buffer::operator=(Buffer &&other) {
+Buffer &Buffer::operator=(Buffer &&other) noexcept {
   if (this != &other) {
     data_ = other.data_;
     bytes_ = other.bytes_;
