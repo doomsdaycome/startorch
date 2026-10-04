@@ -1,12 +1,21 @@
 cmake_minimum_required(VERSION 3.23)
 
-project(startorch VERSION 0.1.0 LANGUAGES CXX)
+project(startorch VERSION 0.1.0 LANGUAGES CXX CUDA)
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CUDA_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
+set(CMAKE_CUDA_STANDARD_REQUIRED YES)
+
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CUDA_EXTENSIONS OFF)
+
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+    set(CMAKE_CUDA_ARCHITECTURES "native")
+endif()
 
 option(BUILD_SHARED_LIBS "Build startorch as a shared library" OFF)
 option(BUILD_TESTS "Build startorch unit tests" OFF)
@@ -18,7 +27,7 @@ add_library(startorch::startorch ALIAS startorch)
 target_sources(
     startorch
     PRIVATE
-        src/darkside/memory/allocator.cpp
+        src/darkside/kernel/allocator.cu
         src/darkside/memory/buffer.cpp
         src/startorch/engine/memory.cpp
         src/startorch/engine/system.cpp
@@ -33,6 +42,11 @@ target_include_directories(
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+set_target_properties(
+    startorch
+    PROPERTIES CUDA_SEPARABLE_COMPILATION OFF CUDA_RESOLVE_DEVICE_SYMBOLS OFF
 )
 
 if(BUILD_SHARED_LIBS)
