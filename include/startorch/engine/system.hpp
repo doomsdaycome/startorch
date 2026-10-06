@@ -19,9 +19,14 @@ public:
   System &operator=(System &&other) noexcept = default;
   System &operator=(const System &other) = delete;
 
+  explicit operator bool() const;
+  bool operator!() const;
+
   Memory &GetMemory();
   const Memory &GetMemory() const;
   SystemType GetType() const;
+
+  bool IsNull() const;
 
 private:
   Memory memory_ = Memory();
