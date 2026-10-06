@@ -22,18 +22,19 @@ public:
   Memory &operator=(const Memory &other) = delete;
 
   explicit operator bool() const;
-  bool operator!() const;
 
   darkside::Allocator &GetPhysicalAllocator();
   const darkside::Allocator &GetPhysicalAllocator() const;
   darkside::Allocator &GetVirtualAllocator();
   const darkside::Allocator &GetVirtualAllocator() const;
+  SystemType GetSystemType() const;
 
   bool IsNull() const;
 
 private:
   darkside::Allocator physical_allocator_ = darkside::Allocator();
   darkside::Allocator virtual_allocator_ = darkside::Allocator();
+  SystemType system_type_ = SystemType::kUndefined;
 };
 
 } // namespace startorch

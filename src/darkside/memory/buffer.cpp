@@ -22,8 +22,6 @@ Buffer::operator bool() const {
          type_ != startorch::MallocType::kOptionCount;
 }
 
-bool Buffer::operator!() const { return !static_cast<bool>(*this); }
-
 void *Buffer::GetData() { return data_; }
 const void *Buffer::GetData() const { return data_; }
 std::uint64_t Buffer::GetBytes() const { return bytes_; }

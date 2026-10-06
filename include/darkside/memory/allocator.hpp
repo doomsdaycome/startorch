@@ -21,7 +21,6 @@ public:
   Allocator &operator=(const Allocator &other) = delete;
 
   explicit operator bool() const;
-  bool operator!() const;
 
   Buffer &GetBuffer();
   const Buffer &GetBuffer() const;

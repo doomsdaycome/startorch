@@ -1,6 +1,7 @@
 #ifndef STARTORCH_ENGINE_BRIDGE_HPP_
 #define STARTORCH_ENGINE_BRIDGE_HPP_
 
+#include "startorch/common/defaults.hpp"
 #include "startorch/common/types.hpp"
 #include "startorch/engine/system.hpp"
 
@@ -11,7 +12,7 @@ public:
   Bridge() = default;
   Bridge(Bridge &&other) noexcept = default;
   Bridge(const Bridge &other) = default;
-  Bridge(const System &destination_system, const System &source_system);
+  Bridge(System &destination_system, System &source_system);
 
   ~Bridge() = default;
 
@@ -19,7 +20,6 @@ public:
   Bridge &operator=(const Bridge &other) = default;
 
   explicit operator bool() const;
-  bool operator!() const;
 
   System &GetDestinationSystem();
   const System &GetDestinationSystem() const;
@@ -30,7 +30,7 @@ public:
   bool IsNull() const;
 
   void Copy(darkside::Buffer &destination_buffer,
-            const darkside::Buffer &source_buffer);
+            darkside::Buffer &source_buffer);
 
 private:
   System *destination_system_data_ = nullptr;

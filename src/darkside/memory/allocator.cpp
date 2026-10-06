@@ -89,6 +89,28 @@ Allocator::~Allocator() {
 
 Allocator &Allocator::operator=(Allocator &&other) noexcept {
   if (this != &other) {
+    if (!buffer_.IsNull()) {
+      void *data = buffer_.GetData();
+
+      switch (buffer_.GetMallocType()) {
+      case startorch::MallocType::kHost:
+        delete[] static_cast<std::uint8_t *>(data);
+        break;
+
+      case startorch::MallocType::kPinned:
+        cudaFreeHost(data);
+        break;
+
+      case startorch::MallocType::kDevice:
+      case startorch::MallocType::kUnified:
+        cudaFree(data);
+        break;
+
+      default:
+        break;
+      }
+    }
+
     buffer_ = std::move(other.buffer_);
     offset_ = other.offset_;
     aligned_size_ = other.aligned_size_;
@@ -104,8 +126,6 @@ Allocator &Allocator::operator=(Allocator &&other) noexcept {
 Allocator::operator bool() const {
   return !buffer_.IsNull() && aligned_size_ != 0ul;
 }
-
-bool Allocator::operator!() const { return !static_cast<bool>(*this); }
 
 Buffer &Allocator::GetBuffer() { return buffer_; }
 const Buffer &Allocator::GetBuffer() const { return buffer_; }

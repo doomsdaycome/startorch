@@ -11,16 +11,15 @@ class Buffer {
 public:
   Buffer() = default;
   Buffer(Buffer &&other) noexcept = default;
-  Buffer(const Buffer &other) = delete;
+  Buffer(const Buffer &other) = default;
   Buffer(void *data, std::uint64_t bytes, startorch::MallocType type);
 
   ~Buffer() = default;
 
   Buffer &operator=(Buffer &&other) noexcept = default;
-  Buffer &operator=(const Buffer &other) = delete;
+  Buffer &operator=(const Buffer &other) = default;
 
   explicit operator bool() const;
-  bool operator!() const;
 
   void *GetData();
   const void *GetData() const;
