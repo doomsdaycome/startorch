@@ -19,7 +19,7 @@ enum class SystemType : std::uint8_t {
   kOptionCount = 3
 };
 
-enum class BufferType : std::uint8_t {
+enum class MallocType : std::uint8_t {
   kUndefined = 0,
 
   kHost = 1,
@@ -27,6 +27,7 @@ enum class BufferType : std::uint8_t {
   kPinned = 3,
   kUnified = 4,
 
+  kOptionCount = 5
 };
 
 enum class BridgeType : std::uint8_t {

@@ -13,7 +13,7 @@ public:
   Allocator() = default;
   Allocator(Allocator &&other) noexcept;
   Allocator(const Allocator &other) = delete;
-  Allocator(std::uint64_t bytes, startorch::BufferType buffer_type);
+  Allocator(std::uint64_t bytes, startorch::MallocType buffer_type);
 
   ~Allocator();
 
@@ -27,11 +27,12 @@ public:
   const Buffer &GetBuffer() const;
   std::uint64_t GetOffset() const;
   std::uint64_t GetAlignedSize() const;
+  startorch::MallocType GetType() const;
 
   bool IsNull() const;
 
   Buffer NewBuffer(std::uint64_t bytes);
-  void DeleteBuffer(const Buffer &buffer);
+  void DeleteBuffer(Buffer &buffer);
 
 private:
   Buffer buffer_ = Buffer();

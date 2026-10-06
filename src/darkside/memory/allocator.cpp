@@ -20,38 +20,37 @@ Allocator::Allocator(Allocator &&other) noexcept
   other.aligned_size_ = 0ul;
 }
 
-Allocator::Allocator(std::uint64_t bytes, startorch::BufferType buffer_type) {
-  if (!bytes || buffer_type == startorch::BufferType::kUndefined)
+Allocator::Allocator(std::uint64_t bytes, startorch::MallocType buffer_type) {
+  if (bytes == 0ul || buffer_type == startorch::MallocType::kUndefined)
     return;
 
   void *data = nullptr;
 
   switch (buffer_type) {
-  case startorch::BufferType::kHost:
+  case startorch::MallocType::kHost:
     data = static_cast<void *>(new (std::nothrow) std::uint8_t[bytes]);
     aligned_size_ = 64ul;
     break;
 
-  case startorch::BufferType::kDevice:
+  case startorch::MallocType::kDevice:
     if (cudaMalloc(&data, bytes) != cudaSuccess)
       data = nullptr;
     aligned_size_ = 256ul;
     break;
 
-  case startorch::BufferType::kPinned:
+  case startorch::MallocType::kPinned:
     if (cudaMallocHost(&data, bytes) != cudaSuccess)
       data = nullptr;
     aligned_size_ = 4096ul;
     break;
 
-  case startorch::BufferType::kUnified:
+  case startorch::MallocType::kUnified:
     if (cudaMallocManaged(&data, bytes) != cudaSuccess)
       data = nullptr;
     aligned_size_ = 256ul;
     break;
 
   default:
-    aligned_size_ = 64ul;
     break;
   }
 
@@ -64,22 +63,22 @@ Allocator::Allocator(std::uint64_t bytes, startorch::BufferType buffer_type) {
 }
 
 Allocator::~Allocator() {
-  if (!buffer_)
+  if (buffer_.IsNull())
     return;
 
   void *data = buffer_.GetData();
 
-  switch (buffer_.GetType()) {
-  case startorch::BufferType::kHost:
+  switch (buffer_.GetMallocType()) {
+  case startorch::MallocType::kHost:
     delete[] static_cast<std::uint8_t *>(data);
     break;
 
-  case startorch::BufferType::kPinned:
+  case startorch::MallocType::kPinned:
     cudaFreeHost(data);
     break;
 
-  case startorch::BufferType::kDevice:
-  case startorch::BufferType::kUnified:
+  case startorch::MallocType::kDevice:
+  case startorch::MallocType::kUnified:
     cudaFree(data);
     break;
 
@@ -89,7 +88,6 @@ Allocator::~Allocator() {
 }
 
 Allocator &Allocator::operator=(Allocator &&other) noexcept {
-
   if (this != &other) {
     buffer_ = std::move(other.buffer_);
     offset_ = other.offset_;
@@ -103,38 +101,43 @@ Allocator &Allocator::operator=(Allocator &&other) noexcept {
   return *this;
 }
 
-Allocator::operator bool() const { return !buffer_.IsNull(); }
-bool Allocator::operator!() const { return buffer_.IsNull(); }
+Allocator::operator bool() const {
+  return !buffer_.IsNull() && aligned_size_ != 0ul;
+}
+
+bool Allocator::operator!() const { return !static_cast<bool>(*this); }
 
 Buffer &Allocator::GetBuffer() { return buffer_; }
 const Buffer &Allocator::GetBuffer() const { return buffer_; }
 std::uint64_t Allocator::GetOffset() const { return offset_; }
 std::uint64_t Allocator::GetAlignedSize() const { return aligned_size_; }
 
+startorch::MallocType Allocator::GetType() const {
+  return buffer_.GetMallocType();
+}
+
 bool Allocator::IsNull() const { return !(*this); }
 
 Buffer Allocator::NewBuffer(std::uint64_t bytes) {
-  if (!bytes || !buffer_)
+  if (bytes == 0ul || buffer_.IsNull())
     return Buffer();
 
-  std::uint64_t aligned_offset =
-      (offset_ + aligned_size_ - 1ul) & ~(aligned_size_ - 1ul);
   std::uint64_t aligned_bytes =
       (bytes + aligned_size_ - 1ul) & ~(aligned_size_ - 1ul);
 
-  if (aligned_offset + aligned_bytes > buffer_.GetBytes())
+  if (offset_ + aligned_bytes > buffer_.GetBytes())
     return Buffer();
 
   std::uint8_t *data = static_cast<std::uint8_t *>(buffer_.GetData());
-  void *new_data = static_cast<void *>(data + aligned_offset);
+  void *new_data = static_cast<void *>(data + offset_);
 
-  offset_ = aligned_offset + aligned_bytes;
+  offset_ += aligned_bytes;
 
-  return Buffer(new_data, bytes, buffer_.GetType());
+  return Buffer(new_data, bytes, buffer_.GetMallocType());
 }
 
-void Allocator::DeleteBuffer(const Buffer &buffer) {
-  if (!buffer || !buffer_)
+void Allocator::DeleteBuffer(Buffer &buffer) {
+  if (buffer.IsNull() || buffer_.IsNull())
     return;
 
   const auto *data = static_cast<const std::uint8_t *>(buffer_.GetData());
@@ -143,12 +146,12 @@ void Allocator::DeleteBuffer(const Buffer &buffer) {
   if (old_data < data || old_data >= data + buffer_.GetBytes())
     return;
 
-  std::uint64_t aligned_offset = static_cast<std::uint64_t>(old_data - data);
+  std::uint64_t current_offset = static_cast<std::uint64_t>(old_data - data);
   std::uint64_t aligned_bytes =
       (buffer.GetBytes() + aligned_size_ - 1ul) & ~(aligned_size_ - 1ul);
 
-  if (aligned_offset + aligned_bytes == offset_)
-    offset_ = aligned_offset;
+  if (current_offset + aligned_bytes == offset_)
+    offset_ = current_offset;
 }
 
 } // namespace darkside

@@ -12,7 +12,7 @@ public:
   Buffer() = default;
   Buffer(Buffer &&other) noexcept = default;
   Buffer(const Buffer &other) = delete;
-  Buffer(void *data, std::uint64_t bytes, startorch::BufferType type);
+  Buffer(void *data, std::uint64_t bytes, startorch::MallocType type);
 
   ~Buffer() = default;
 
@@ -25,14 +25,14 @@ public:
   void *GetData();
   const void *GetData() const;
   std::uint64_t GetBytes() const;
-  startorch::BufferType GetType() const;
+  startorch::MallocType GetMallocType() const;
 
   bool IsNull() const;
 
 private:
   void *data_ = nullptr;
   std::uint64_t bytes_ = 0ul;
-  startorch::BufferType type_ = startorch::BufferType::kUndefined;
+  startorch::MallocType type_ = startorch::MallocType::kUndefined;
 };
 
 } // namespace darkside
