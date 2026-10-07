@@ -7,29 +7,52 @@
 
 namespace startorch {
 
-Memory::Memory(std::uint64_t physical_bytes, std::uint64_t virtual_bytes,
-               SystemType system_type)
-    : system_type_(system_type) {
-  switch (system_type_) {
+startorch::MallocType GetPhysicalMallocType(SystemType system_type) {
+  switch (system_type) {
   case SystemType::kHost:
-    physical_allocator_ =
-        darkside::Allocator(physical_bytes, MallocType::kHost);
-    virtual_allocator_ =
-        darkside::Allocator(virtual_bytes, MallocType::kPinned);
-    break;
+    return startorch::MallocType::kHost;
 
   case SystemType::kDevice:
-    physical_allocator_ =
-        darkside::Allocator(physical_bytes, MallocType::kHost);
-    virtual_allocator_ =
-        darkside::Allocator(virtual_bytes, MallocType::kPinned);
-    break;
+    return startorch::MallocType::kDevice;
 
-  case SystemType::kUndefined:
-  case SystemType::kOptionCount:
-    system_type_ = SystemType::kUndefined;
-    return;
+  default:
+    return startorch::MallocType::kUndefined;
   }
+}
+
+startorch::MallocType GetVirtualMallocType(SystemType system_type) {
+  switch (system_type) {
+  case SystemType::kHost:
+    return startorch::MallocType::kPinned;
+
+  case SystemType::kDevice:
+    return startorch::MallocType::kUnified;
+
+  default:
+    return startorch::MallocType::kUndefined;
+  }
+}
+
+constexpr SystemType GetValidSystemType(SystemType system_type) noexcept {
+  switch (system_type) {
+  case SystemType::kHost:
+  case SystemType::kDevice:
+    return system_type;
+
+  default:
+    return SystemType::kUndefined;
+  }
+}
+
+Memory::Memory(std::uint64_t physical_bytes, std::uint64_t virtual_bytes,
+               SystemType system_type)
+    : physical_allocator_(physical_bytes, GetPhysicalMallocType(system_type)),
+      virtual_allocator_(virtual_bytes, GetVirtualMallocType(system_type)),
+      system_type_(GetValidSystemType(system_type)) {}
+
+Memory &Memory::NullMemory() {
+  static Memory null_instance;
+  return null_instance;
 }
 
 Memory::operator bool() const {

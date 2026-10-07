@@ -32,7 +32,6 @@ target_sources(
     src/darkside/memory/allocator.cpp
     src/darkside/memory/buffer.cpp
     src/darkside/scalar/utilities.cpp
-    src/startorch/common/configs.cpp
     src/startorch/engine/bridge.cpp
     src/startorch/engine/memory.cpp
     src/startorch/engine/system.cpp

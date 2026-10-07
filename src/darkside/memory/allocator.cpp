@@ -2,7 +2,6 @@
 
 #include <cstdint>
 #include <new>
-#include <utility>
 
 #include <cuda_runtime_api.h>
 #include <driver_types.h>
@@ -11,14 +10,6 @@
 #include "startorch/common/types.hpp"
 
 namespace darkside {
-
-Allocator::Allocator(Allocator &&other) noexcept
-    : buffer_(std::move(other.buffer_)), offset_(other.offset_),
-      aligned_size_(other.aligned_size_) {
-  other.buffer_ = Buffer();
-  other.offset_ = 0ul;
-  other.aligned_size_ = 0ul;
-}
 
 Allocator::Allocator(std::uint64_t bytes, startorch::MallocType buffer_type) {
   if (bytes == 0ul || buffer_type == startorch::MallocType::kUndefined)
@@ -87,40 +78,9 @@ Allocator::~Allocator() {
   }
 }
 
-Allocator &Allocator::operator=(Allocator &&other) noexcept {
-  if (this != &other) {
-    if (!buffer_.IsNull()) {
-      void *data = buffer_.GetData();
-
-      switch (buffer_.GetMallocType()) {
-      case startorch::MallocType::kHost:
-        delete[] static_cast<std::uint8_t *>(data);
-        break;
-
-      case startorch::MallocType::kPinned:
-        cudaFreeHost(data);
-        break;
-
-      case startorch::MallocType::kDevice:
-      case startorch::MallocType::kUnified:
-        cudaFree(data);
-        break;
-
-      default:
-        break;
-      }
-    }
-
-    buffer_ = std::move(other.buffer_);
-    offset_ = other.offset_;
-    aligned_size_ = other.aligned_size_;
-
-    other.buffer_ = Buffer();
-    other.offset_ = 0ul;
-    other.aligned_size_ = 0ul;
-  }
-
-  return *this;
+Allocator &Allocator::NullAllocator() {
+  static Allocator null_instance;
+  return null_instance;
 }
 
 Allocator::operator bool() const {

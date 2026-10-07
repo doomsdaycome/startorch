@@ -11,14 +11,16 @@ namespace darkside {
 class Allocator {
 public:
   Allocator() = default;
-  Allocator(Allocator &&other) noexcept;
+  Allocator(Allocator &&other) noexcept = delete;
   Allocator(const Allocator &other) = delete;
   Allocator(std::uint64_t bytes, startorch::MallocType buffer_type);
 
   ~Allocator();
 
-  Allocator &operator=(Allocator &&other) noexcept;
+  Allocator &operator=(Allocator &&other) noexcept = delete;
   Allocator &operator=(const Allocator &other) = delete;
+
+  static Allocator &NullAllocator();
 
   explicit operator bool() const;
 

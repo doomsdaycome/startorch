@@ -21,6 +21,9 @@ public:
 
   explicit operator bool() const;
 
+  template <typename P> P *GetData();
+  template <typename P> const P *GetData() const;
+
   void *GetData();
   const void *GetData() const;
   std::uint64_t GetBytes() const;

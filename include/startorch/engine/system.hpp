@@ -11,15 +11,17 @@ namespace startorch {
 class System {
 public:
   System() = default;
-  System(System &&other) noexcept = default;
+  System(System &&other) noexcept = delete;
   System(const System &other) = delete;
   System(std::uint64_t index_, std::uint64_t physical_bytes,
          std::uint64_t virtual_bytes, SystemType system_type);
 
   ~System() = default;
 
-  System &operator=(System &&other) noexcept = default;
+  System &operator=(System &&other) noexcept = delete;
   System &operator=(const System &other) = delete;
+
+  static System &NullSystem();
 
   explicit operator bool() const;
 
@@ -32,7 +34,7 @@ public:
 
 private:
   std::uint64_t index_ = 0ul;
-  Memory memory_ = Memory();
+  Memory memory_;
 };
 
 } // namespace startorch

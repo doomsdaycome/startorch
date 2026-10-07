@@ -1,7 +1,6 @@
 #ifndef STARTORCH_ENGINE_BRIDGE_HPP_
 #define STARTORCH_ENGINE_BRIDGE_HPP_
 
-#include "startorch/common/defaults.hpp"
 #include "startorch/common/types.hpp"
 #include "startorch/engine/system.hpp"
 
@@ -12,7 +11,7 @@ public:
   Bridge() = default;
   Bridge(Bridge &&other) noexcept = default;
   Bridge(const Bridge &other) = default;
-  Bridge(System &destination_system, System &source_system);
+  Bridge(System &destination_system, const System &source_system);
 
   ~Bridge() = default;
 
@@ -30,11 +29,11 @@ public:
   bool IsNull() const;
 
   void Copy(darkside::Buffer &destination_buffer,
-            darkside::Buffer &source_buffer);
+            const darkside::Buffer &source_buffer);
 
 private:
   System *destination_system_data_ = nullptr;
-  System *source_system_data_ = nullptr;
+  const System *source_system_data_ = nullptr;
   BridgeType type_ = BridgeType::kUndefined;
 };
 

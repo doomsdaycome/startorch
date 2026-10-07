@@ -11,15 +11,17 @@ namespace startorch {
 class Memory {
 public:
   Memory() = default;
-  Memory(Memory &&other) noexcept = default;
+  Memory(Memory &&other) noexcept = delete;
   Memory(const Memory &other) = delete;
   Memory(std::uint64_t physical_bytes, std::uint64_t virtual_bytes,
          SystemType system_type);
 
   ~Memory() = default;
 
-  Memory &operator=(Memory &&other) noexcept = default;
+  Memory &operator=(Memory &&other) noexcept = delete;
   Memory &operator=(const Memory &other) = delete;
+
+  static Memory &NullMemory();
 
   explicit operator bool() const;
 
@@ -32,8 +34,8 @@ public:
   bool IsNull() const;
 
 private:
-  darkside::Allocator physical_allocator_ = darkside::Allocator();
-  darkside::Allocator virtual_allocator_ = darkside::Allocator();
+  darkside::Allocator physical_allocator_;
+  darkside::Allocator virtual_allocator_;
   SystemType system_type_ = SystemType::kUndefined;
 };
 
