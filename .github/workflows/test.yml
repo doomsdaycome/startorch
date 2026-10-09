@@ -10,19 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Toolkit
-        uses: Jimver/cuda-toolkit@v0.2.21
-        with:
-          cuda-version: '12.4.1'
+      - name: CUDA toolkit setup
+        uses: Jimver/cuda-toolkit@v0.2.36
 
-      - name: Build
+      - name: Build startorch project
         run: |
           cmake -B build
           cmake --build build
 
-      - name: Test
+      - name: Unit test
         run: |
            ctest --test-dir build 
