@@ -21,6 +21,10 @@ jobs:
           cmake -B build
           cmake --build build
 
-      - name: Unit test
+      - name: Unit testing
         run: |
            ctest --test-dir build 
+
+      - name: Execute examples
+        run: |
+          ./build/startorch_example
