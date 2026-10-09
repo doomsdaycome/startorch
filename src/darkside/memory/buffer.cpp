@@ -41,4 +41,9 @@ std::uint64_t Buffer::GetBytes() const { return bytes_; }
 startorch::MallocType Buffer::GetMallocType() const { return type_; }
 bool Buffer::IsNull() const { return !(*this); }
 
+Buffer &Buffer::GetNull() {
+  static Buffer null_instance;
+  return null_instance;
+}
+
 } // namespace darkside

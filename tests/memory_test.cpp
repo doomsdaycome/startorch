@@ -2,6 +2,7 @@
 
 #include <gtest/gtest.h>
 
+#include "darkside/memory/allocator.hpp"
 #include "darkside/memory/buffer.hpp"
 #include "darkside/scalar/utilities.hpp"
 #include "startorch/common/types.hpp"
@@ -61,37 +62,38 @@ TEST(BufferTest, OperatorBoolTest) {
 }
 
 TEST(BufferTest, GetDataTest) {
-  std::uint8_t d0 = 7;
-  std::uint8_t d1 = 9;
+  std::uint8_t v0 = 7;
+  std::uint8_t v1 = 9;
 
-  Buffer b0(&d0, SizeOfCPPType(std::uint8_t), startorch::MallocType::kPinned);
-  const Buffer b1(&d1, SizeOfCPPType(std::uint8_t),
+  Buffer b0(&v0, SizeOfCPPType(std::uint8_t), startorch::MallocType::kPinned);
+  const Buffer b1(&v1, SizeOfCPPType(std::uint8_t),
                   startorch::MallocType::kPinned);
 
-  EXPECT_EQ(*b0.GetData<uint8_t>(), d0);
-  EXPECT_EQ(*b1.GetData<uint8_t>(), d1);
+  EXPECT_EQ(*b0.GetData<uint8_t>(), v0);
+  EXPECT_EQ(*b1.GetData<uint8_t>(), v1);
 }
 
 TEST(BufferTest, GetBytesTest) {
-  std::uint8_t d0 = 0;
-  std::uint64_t s0 = 2048ul;
-  Buffer b0(&d0, s0, startorch::MallocType::kHost);
+  std::uint64_t v0 = 0;
+  std::uint64_t v1 = 2048ul;
 
-  EXPECT_EQ(b0.GetBytes(), s0);
+  Buffer b0(&v0, v1, startorch::MallocType::kHost);
+
+  EXPECT_EQ(b0.GetBytes(), v1);
 }
 
 TEST(BufferTest, GetMallocTypeTest) {
-  std::uint8_t d0 = 0;
+  std::uint8_t v0 = 0;
 
   startorch::MallocType t0 = startorch::MallocType::kDevice;
   startorch::MallocType t1 = startorch::MallocType::kDevice;
   startorch::MallocType t2 = startorch::MallocType::kDevice;
   startorch::MallocType t3 = startorch::MallocType::kDevice;
 
-  Buffer b0(&d0, 64ul, t0);
-  Buffer b1(&d0, 64ul, t1);
-  Buffer b2(&d0, 64ul, t2);
-  Buffer b3(&d0, 64ul, t3);
+  Buffer b0(&v0, 64ul, t0);
+  Buffer b1(&v0, 64ul, t1);
+  Buffer b2(&v0, 64ul, t2);
+  Buffer b3(&v0, 64ul, t3);
 
   EXPECT_EQ(b0.GetMallocType(), t0);
   EXPECT_EQ(b1.GetMallocType(), t1);
@@ -115,3 +117,5 @@ TEST(BufferTest, IsNullTest) {
   EXPECT_EQ(b3.IsNull(), true);
   EXPECT_EQ(b4.IsNull(), true);
 }
+
+TEST(AllocatorTest, ConstructorTest) {}

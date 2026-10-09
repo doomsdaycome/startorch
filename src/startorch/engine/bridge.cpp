@@ -45,14 +45,14 @@ Bridge::operator bool() const {
 
 System &Bridge::GetDestinationSystem() {
   if (destination_system_data_ == nullptr)
-    return System::NullSystem();
+    return System::GetNull();
 
   return *destination_system_data_;
 }
 
 const System &Bridge::GetDestinationSystem() const {
   if (destination_system_data_ == nullptr)
-    return System::NullSystem();
+    return System::GetNull();
 
   return *destination_system_data_;
 }

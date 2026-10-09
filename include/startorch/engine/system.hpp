@@ -21,8 +21,6 @@ public:
   System &operator=(System &&other) noexcept = delete;
   System &operator=(const System &other) = delete;
 
-  static System &NullSystem();
-
   explicit operator bool() const;
 
   std::uint64_t GetIndex() const;
@@ -31,6 +29,8 @@ public:
   SystemType GetType() const;
 
   bool IsNull() const;
+
+  static System &GetNull();
 
 private:
   std::uint64_t index_ = 0ul;

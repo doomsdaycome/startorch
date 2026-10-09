@@ -21,8 +21,6 @@ public:
   Memory &operator=(Memory &&other) noexcept = delete;
   Memory &operator=(const Memory &other) = delete;
 
-  static Memory &NullMemory();
-
   explicit operator bool() const;
 
   darkside::Allocator &GetPhysicalAllocator();
@@ -32,6 +30,8 @@ public:
   SystemType GetSystemType() const;
 
   bool IsNull() const;
+
+  static Memory &GetNull();
 
 private:
   darkside::Allocator physical_allocator_;

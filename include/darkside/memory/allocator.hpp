@@ -20,8 +20,6 @@ public:
   Allocator &operator=(Allocator &&other) noexcept = delete;
   Allocator &operator=(const Allocator &other) = delete;
 
-  static Allocator &NullAllocator();
-
   explicit operator bool() const;
 
   Buffer &GetBuffer();
@@ -34,6 +32,8 @@ public:
 
   Buffer NewBuffer(std::uint64_t bytes);
   void DeleteBuffer(Buffer &buffer);
+
+  static Allocator &GetNull();
 
 private:
   Buffer buffer_ = Buffer();

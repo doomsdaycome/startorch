@@ -31,6 +31,8 @@ public:
 
   bool IsNull() const;
 
+  static Buffer &GetNull();
+
 private:
   void *data_ = nullptr;
   std::uint64_t bytes_ = 0ul;

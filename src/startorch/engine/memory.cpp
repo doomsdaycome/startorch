@@ -50,11 +50,6 @@ Memory::Memory(std::uint64_t physical_bytes, std::uint64_t virtual_bytes,
       virtual_allocator_(virtual_bytes, GetVirtualMallocType(system_type)),
       system_type_(GetValidSystemType(system_type)) {}
 
-Memory &Memory::NullMemory() {
-  static Memory null_instance;
-  return null_instance;
-}
-
 Memory::operator bool() const {
   return !physical_allocator_.IsNull() || !virtual_allocator_.IsNull();
 }
@@ -78,5 +73,10 @@ const darkside::Allocator &Memory::GetVirtualAllocator() const {
 SystemType Memory::GetSystemType() const { return system_type_; }
 
 bool Memory::IsNull() const { return !(*this); }
+
+Memory &Memory::GetNull() {
+  static Memory null_instance;
+  return null_instance;
+}
 
 } // namespace startorch

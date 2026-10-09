@@ -78,11 +78,6 @@ Allocator::~Allocator() {
   }
 }
 
-Allocator &Allocator::NullAllocator() {
-  static Allocator null_instance;
-  return null_instance;
-}
-
 Allocator::operator bool() const {
   return !buffer_.IsNull() && aligned_size_ != 0ul;
 }
@@ -100,13 +95,13 @@ bool Allocator::IsNull() const { return !(*this); }
 
 Buffer Allocator::NewBuffer(std::uint64_t bytes) {
   if (bytes == 0ul || buffer_.IsNull())
-    return Buffer();
+    return Buffer::GetNull();
 
   std::uint64_t aligned_bytes =
       (bytes + aligned_size_ - 1ul) & ~(aligned_size_ - 1ul);
 
   if (offset_ + aligned_bytes > buffer_.GetBytes())
-    return Buffer();
+    return Buffer::GetNull();
 
   std::uint8_t *data = static_cast<std::uint8_t *>(buffer_.GetData());
   void *new_data = static_cast<void *>(data + offset_);
@@ -132,6 +127,11 @@ void Allocator::DeleteBuffer(Buffer &buffer) {
 
   if (current_offset + aligned_bytes == offset_)
     offset_ = current_offset;
+}
+
+Allocator &Allocator::GetNull() {
+  static Allocator null_instance;
+  return null_instance;
 }
 
 } // namespace darkside
