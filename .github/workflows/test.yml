@@ -12,9 +12,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
+      - name: Toolkit
+        uses: jimmy-wei/cuda-toolkit@v0.2.2
+        with:
+          cuda-version: '12.4.1'
+
       - name: Build
         run: |
           cmake -B build
           cmake --build build
-          ctest --test-dir build 
+
+      - name: Test
+        run: |
+           ctest --test-dir build 
