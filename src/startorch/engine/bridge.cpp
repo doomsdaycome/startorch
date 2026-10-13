@@ -1,7 +1,6 @@
 #include "startorch/engine/bridge.hpp"
 
 #include <algorithm>
-#include <cassert>
 #include <cstdint>
 #include <cstring>
 
@@ -94,8 +93,15 @@ void Bridge::Copy(darkside::Buffer &destination_buffer,
     break;
 
   default:
+    cudaMemcpy(destination_buffer.GetData(), source_buffer.GetData(), bytes,
+               cudaMemcpyDefault);
     break;
   }
+}
+
+Bridge &Bridge::GetNull() {
+  static Bridge null_instance;
+  return null_instance;
 }
 
 } // namespace startorch

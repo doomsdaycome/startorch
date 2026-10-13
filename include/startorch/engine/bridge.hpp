@@ -31,6 +31,8 @@ public:
   void Copy(darkside::Buffer &destination_buffer,
             const darkside::Buffer &source_buffer);
 
+  static Bridge &GetNull();
+
 private:
   System *destination_system_data_ = nullptr;
   const System *source_system_data_ = nullptr;
