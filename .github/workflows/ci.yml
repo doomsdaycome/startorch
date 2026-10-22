@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [cpp, c]
+
+jobs:
+  test-cpp:
+    if: github.ref_name == 'cpp'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup CUDA Toolkit
+        uses: Jimver/cuda-toolkit@v0.2.36
+
+      - name: Build Project
+        run: cmake -B build && cmake --build build
+
+      - name: Run Unit Tests
+        run: ctest --test-dir build 
+
+      - name: Run Examples
+        run: ./build/startorch_example
+
+  test-c:
+    if: github.ref_name == 'cpp'
+
+    runs-on: ubuntu-latest
