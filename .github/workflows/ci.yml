@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [cpp, c]
+    branches: [main, cpp, c]
 
 jobs:
   test-cpp:
