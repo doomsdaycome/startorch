@@ -22,6 +22,9 @@ jobs:
       - name: Run Unit Tests
         run: ctest --test-dir build 
 
+      - name: Rerun Failed Tests
+        run: ctest --test-dir build --rerun-failed --output-on-failure
+
       - name: Run Examples
         run: |
           ./build/startorch_test
