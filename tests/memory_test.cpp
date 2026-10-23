@@ -1,6 +1,6 @@
-#include <cstdint>
-
 #include <gtest/gtest.h>
+
+#include <cstdint>
 
 #include "darkside/memory/allocator.hpp"
 #include "darkside/memory/buffer.hpp"
