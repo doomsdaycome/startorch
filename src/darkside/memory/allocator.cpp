@@ -11,12 +11,14 @@
 
 namespace darkside {
 
-Allocator::Allocator(std::uint64_t bytes, startorch::MallocType buffer_type) {
-  if (bytes == 0ul || buffer_type == startorch::MallocType::kUndefined) return;
+Allocator::Allocator(std::uint64_t bytes, startorch::MallocType type) {
+  if (bytes == 0ul || type == startorch::MallocType::kUndefined ||
+      type == startorch::MallocType::kOptionCount)
+    return;
 
   void* data = nullptr;
 
-  switch (buffer_type) {
+  switch (type) {
     case startorch::MallocType::kHost:
       data = static_cast<void*>(new (std::nothrow) std::uint8_t[bytes]);
       aligned_size_ = 64ul;
@@ -46,7 +48,7 @@ Allocator::Allocator(std::uint64_t bytes, startorch::MallocType buffer_type) {
     return;
   }
 
-  buffer_ = Buffer(data, bytes, buffer_type);
+  buffer_ = Buffer(data, bytes, type);
 }
 
 Allocator::~Allocator() {
@@ -78,8 +80,11 @@ Allocator::operator bool() const {
 }
 
 Buffer& Allocator::GetBuffer() { return buffer_; }
+
 const Buffer& Allocator::GetBuffer() const { return buffer_; }
+
 std::uint64_t Allocator::GetOffset() const { return offset_; }
+
 std::uint64_t Allocator::GetAlignedSize() const { return aligned_size_; }
 
 startorch::MallocType Allocator::GetType() const {

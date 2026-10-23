@@ -13,7 +13,7 @@ class Allocator {
   Allocator() = default;
   Allocator(Allocator&& other) noexcept = delete;
   Allocator(const Allocator& other) = delete;
-  Allocator(std::uint64_t bytes, startorch::MallocType buffer_type);
+  Allocator(std::uint64_t bytes, startorch::MallocType type);
 
   ~Allocator();
 

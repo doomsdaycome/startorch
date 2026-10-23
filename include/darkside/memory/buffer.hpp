@@ -12,7 +12,7 @@ class Buffer {
   Buffer() = default;
   Buffer(Buffer&& other) noexcept = default;
   Buffer(const Buffer& other) = default;
-  Buffer(void* data, std::uint64_t bytes, startorch::MallocType type);
+  Buffer(void* data, std::uint64_t bytes, startorch::MallocType malloc_type);
 
   ~Buffer() = default;
 
@@ -38,7 +38,7 @@ class Buffer {
  private:
   void* data_ = nullptr;
   std::uint64_t bytes_ = 0ul;
-  startorch::MallocType type_ = startorch::MallocType::kUndefined;
+  startorch::MallocType malloc_type_ = startorch::MallocType::kUndefined;
 };
 
 }  // namespace darkside

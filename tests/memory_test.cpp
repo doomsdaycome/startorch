@@ -18,6 +18,8 @@ TEST(BufferTest, ConstructorTest) {
   Buffer b2 = Buffer(nullptr, SizeOfCPPType(std::uint64_t), MallocType::kHost);
   Buffer b3 = Buffer(&v0, 0ul, MallocType::kHost);
   Buffer b4 = Buffer(&v0, SizeOfCPPType(std::uint64_t), MallocType::kUndefined);
+  Buffer b5 =
+      Buffer(&v0, SizeOfCPPType(std::uint64_t), MallocType::kOptionCount);
 
   EXPECT_EQ(b0.GetData(), nullptr);
   EXPECT_EQ(b0.GetBytes(), 0ul);
@@ -38,6 +40,10 @@ TEST(BufferTest, ConstructorTest) {
   EXPECT_EQ(b4.GetData(), nullptr);
   EXPECT_EQ(b4.GetBytes(), 0ul);
   EXPECT_EQ(b4.GetMallocType(), MallocType::kUndefined);
+
+  EXPECT_EQ(b5.GetData(), nullptr);
+  EXPECT_EQ(b5.GetBytes(), 0ul);
+  EXPECT_EQ(b5.GetMallocType(), MallocType::kUndefined);
 }
 
 TEST(BufferTest, OperatorBoolTest) {
@@ -48,7 +54,8 @@ TEST(BufferTest, OperatorBoolTest) {
   Buffer b2 = Buffer(nullptr, SizeOfCPPType(std::uint64_t), MallocType::kHost);
   Buffer b3 = Buffer(&v0, 0ul, MallocType::kHost);
   Buffer b4 = Buffer(&v0, SizeOfCPPType(std::uint64_t), MallocType::kUndefined);
-  Buffer b5 = Buffer(&v0, SizeOfCPPType(std::uint64_t), MallocType::kUndefined);
+  Buffer b5 =
+      Buffer(&v0, SizeOfCPPType(std::uint64_t), MallocType::kOptionCount);
 
   EXPECT_EQ(static_cast<bool>(b0), false);
   EXPECT_EQ(!b0, true);
@@ -59,6 +66,7 @@ TEST(BufferTest, OperatorBoolTest) {
   EXPECT_EQ(static_cast<bool>(b2), false);
   EXPECT_EQ(static_cast<bool>(b3), false);
   EXPECT_EQ(static_cast<bool>(b4), false);
+  EXPECT_EQ(!b5, true);
 }
 
 TEST(BufferTest, GetDataTest) {
@@ -118,4 +126,9 @@ TEST(BufferTest, IsNullTest) {
   EXPECT_EQ(b4.IsNull(), true);
 }
 
-TEST(AllocatorTest, ConstructorTest) {}
+TEST(AllocatorTest, ConstructorTest) {
+  Allocator a0;
+  Allocator a1 = Allocator(0ul, MallocType::kHost);
+  Allocator a2 = Allocator(100ul, MallocType::kUndefined);
+  Allocator a3 = Allocator(100ul, MallocType::kOptionCount);
+}
