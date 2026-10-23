@@ -17,6 +17,6 @@ constexpr std::uint64_t operator""_GB(unsigned long long size) noexcept {
   return static_cast<std::uint64_t>(size) << 30;
 }
 
-} // namespace startorch
+}  // namespace startorch
 
-#endif // !STARTORCH_COMMON_LITERALS_HPP_
+#endif  // !STARTORCH_COMMON_LITERALS_HPP_

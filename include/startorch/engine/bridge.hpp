@@ -7,38 +7,38 @@
 namespace startorch {
 
 class Bridge {
-public:
+ public:
   Bridge() = default;
-  Bridge(Bridge &&other) noexcept = default;
-  Bridge(const Bridge &other) = default;
-  Bridge(System &destination_system, const System &source_system);
+  Bridge(Bridge&& other) noexcept = default;
+  Bridge(const Bridge& other) = default;
+  Bridge(System& destination_system, const System& source_system);
 
   ~Bridge() = default;
 
-  Bridge &operator=(Bridge &&other) noexcept = default;
-  Bridge &operator=(const Bridge &other) = default;
+  Bridge& operator=(Bridge&& other) noexcept = default;
+  Bridge& operator=(const Bridge& other) = default;
 
   explicit operator bool() const;
 
-  System &GetDestinationSystem();
-  const System &GetDestinationSystem() const;
-  System &GetSourceSystem();
-  const System &GetSourceSystem() const;
+  System& GetDestinationSystem();
+  const System& GetDestinationSystem() const;
+  System& GetSourceSystem();
+  const System& GetSourceSystem() const;
   BridgeType GetType() const;
 
   bool IsNull() const;
 
-  void Copy(darkside::Buffer &destination_buffer,
-            const darkside::Buffer &source_buffer);
+  void Copy(darkside::Buffer& destination_buffer,
+            const darkside::Buffer& source_buffer);
 
-  static Bridge &GetNull();
+  static Bridge& GetNull();
 
-private:
-  System *destination_system_data_ = nullptr;
-  const System *source_system_data_ = nullptr;
+ private:
+  System* destination_system_data_ = nullptr;
+  const System* source_system_data_ = nullptr;
   BridgeType type_ = BridgeType::kUndefined;
 };
 
-} // namespace startorch
+}  // namespace startorch
 
-#endif // !STARTORCH_ENGINE_BRIDGE_HPP_
+#endif  // !STARTORCH_ENGINE_BRIDGE_HPP_

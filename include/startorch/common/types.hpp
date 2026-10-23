@@ -76,7 +76,6 @@ enum class ScalarType : std::uint8_t {
 using CppType = std::variant<std::monostate, bool, std::uint8_t, std::uint16_t,
                              std::uint32_t, std::uint64_t, std::int8_t,
                              std::int16_t, std::int32_t, std::int64_t
-
 #if defined(__STDCPP_FLOAT16_T__)
                              ,
                              std::float16_t, std::float32_t, std::float64_t,
@@ -87,6 +86,6 @@ using CppType = std::variant<std::monostate, bool, std::uint8_t, std::uint16_t,
 #endif
                              >;
 
-} // namespace startorch
+}  // namespace startorch
 
-#endif // !STARTORCH_COMMON_TYPES_HPP_
+#endif  // !STARTORCH_COMMON_TYPES_HPP_

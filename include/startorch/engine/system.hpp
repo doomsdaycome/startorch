@@ -9,34 +9,34 @@
 namespace startorch {
 
 class System {
-public:
+ public:
   System() = default;
-  System(System &&other) noexcept = delete;
-  System(const System &other) = delete;
+  System(System&& other) noexcept = delete;
+  System(const System& other) = delete;
   System(std::uint64_t index_, std::uint64_t physical_bytes,
          std::uint64_t virtual_bytes, SystemType system_type);
 
   ~System() = default;
 
-  System &operator=(System &&other) noexcept = delete;
-  System &operator=(const System &other) = delete;
+  System& operator=(System&& other) noexcept = delete;
+  System& operator=(const System& other) = delete;
 
   explicit operator bool() const;
 
   std::uint64_t GetIndex() const;
-  Memory &GetMemory();
-  const Memory &GetMemory() const;
+  Memory& GetMemory();
+  const Memory& GetMemory() const;
   SystemType GetType() const;
 
   bool IsNull() const;
 
-  static System &GetNull();
+  static System& GetNull();
 
-private:
+ private:
   std::uint64_t index_ = 0ul;
   Memory memory_;
 };
 
-} // namespace startorch
+}  // namespace startorch
 
-#endif // !STARTORCH_ENGINE_SYSTEM_HPP_
+#endif  // !STARTORCH_ENGINE_SYSTEM_HPP_

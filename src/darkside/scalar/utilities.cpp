@@ -18,4 +18,4 @@ std::uint64_t SizeOfScalarType(startorch::ScalarType scalar_type) {
   });
 }
 
-} // namespace darkside
+}  // namespace darkside

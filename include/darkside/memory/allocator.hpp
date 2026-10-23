@@ -9,21 +9,21 @@
 namespace darkside {
 
 class Allocator {
-public:
+ public:
   Allocator() = default;
-  Allocator(Allocator &&other) noexcept = delete;
-  Allocator(const Allocator &other) = delete;
+  Allocator(Allocator&& other) noexcept = delete;
+  Allocator(const Allocator& other) = delete;
   Allocator(std::uint64_t bytes, startorch::MallocType buffer_type);
 
   ~Allocator();
 
-  Allocator &operator=(Allocator &&other) noexcept = delete;
-  Allocator &operator=(const Allocator &other) = delete;
+  Allocator& operator=(Allocator&& other) noexcept = delete;
+  Allocator& operator=(const Allocator& other) = delete;
 
   explicit operator bool() const;
 
-  Buffer &GetBuffer();
-  const Buffer &GetBuffer() const;
+  Buffer& GetBuffer();
+  const Buffer& GetBuffer() const;
   std::uint64_t GetOffset() const;
   std::uint64_t GetAlignedSize() const;
   startorch::MallocType GetType() const;
@@ -31,16 +31,16 @@ public:
   bool IsNull() const;
 
   Buffer NewBuffer(std::uint64_t bytes);
-  void DeleteBuffer(Buffer &buffer);
+  void DeleteBuffer(Buffer& buffer);
 
-  static Allocator &GetNull();
+  static Allocator& GetNull();
 
-private:
+ private:
   Buffer buffer_ = Buffer();
   std::uint64_t offset_ = 0ul;
   std::uint64_t aligned_size_ = 0ul;
 };
 
-} // namespace darkside
+}  // namespace darkside
 
-#endif // !DARKSIDE_MEMORY_ALLOCATOR_HPP_
+#endif  // !DARKSIDE_MEMORY_ALLOCATOR_HPP_
