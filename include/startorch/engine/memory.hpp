@@ -3,8 +3,8 @@
 
 #include <cstdint>
 
-#include "darkside/memory/allocator.hpp"
 #include "startorch/common/types.hpp"
+#include "startorch/memory/allocator.hpp"
 
 namespace startorch {
 
@@ -23,10 +23,10 @@ class Memory {
 
   explicit operator bool() const;
 
-  darkside::Allocator& GetPhysicalAllocator();
-  const darkside::Allocator& GetPhysicalAllocator() const;
-  darkside::Allocator& GetVirtualAllocator();
-  const darkside::Allocator& GetVirtualAllocator() const;
+  Allocator& GetPhysicalAllocator();
+  const Allocator& GetPhysicalAllocator() const;
+  Allocator& GetVirtualAllocator();
+  const Allocator& GetVirtualAllocator() const;
   SystemType GetSystemType() const;
 
   bool IsNull() const;
@@ -34,8 +34,8 @@ class Memory {
   static Memory& GetNull();
 
  private:
-  darkside::Allocator physical_allocator_;
-  darkside::Allocator virtual_allocator_;
+  Allocator physical_allocator_;
+  Allocator virtual_allocator_;
   SystemType system_type_ = SystemType::kUndefined;
 };
 

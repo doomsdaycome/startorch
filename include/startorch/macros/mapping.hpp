@@ -1,8 +1,8 @@
-#ifndef DARKSIDE_MACROS_MAPPING_HPP_
-#define DARKSIDE_MACROS_MAPPING_HPP_
+#ifndef STARTORCH_MACROS_MAPPING_HPP_
+#define STARTORCH_MACROS_MAPPING_HPP_
 
 #if defined(__STDCPP_FLOAT16_T__)
-#define DARKSIDE_FORALL_SCALAR_TYPE(MACRO)       \
+#define STARTORCH_FORALL_SCALAR_TYPE(MACRO)      \
   MACRO(::startorch::ScalarType::kBool)          \
                                                  \
   MACRO(::startorch::ScalarType::kUnsignedInt8)  \
@@ -22,7 +22,7 @@
                                                  \
   MACRO(::startorch::ScalarType::kBrainFloat16)
 #else
-#define DARKSIDE_FORALL_SCALAR_TYPE(MACRO)       \
+#define STARTORCH_FORALL_SCALAR_TYPE(MACRO)      \
   MACRO(::startorch::ScalarType::kBool)          \
                                                  \
   MACRO(::startorch::ScalarType::kUnsignedInt8)  \
@@ -40,45 +40,45 @@
 #endif
 
 #if defined(__STDCPP_FLOAT16_T__)
-#define DARKSIDE_FORALL_CPP_TYPE(MACRO) \
-  MACRO(bool)                           \
-                                        \
-  MACRO(std::uint8_t)                   \
-  MACRO(std::uint16_t)                  \
-  MACRO(std::uint32_t)                  \
-  MACRO(std::uint64_t)                  \
-                                        \
-  MACRO(std::int8_t)                    \
-  MACRO(std::int16_t)                   \
-  MACRO(std::int32_t)                   \
-  MACRO(std::int64_t)                   \
-                                        \
-  MACRO(std::float16_t)                 \
-  MACRO(std::float32_t)                 \
-  MACRO(std::float64_t)                 \
-  MACRO(std::float128_t)                \
-                                        \
+#define STARTORCH_FORALL_CPP_TYPE(MACRO) \
+  MACRO(bool)                            \
+                                         \
+  MACRO(std::uint8_t)                    \
+  MACRO(std::uint16_t)                   \
+  MACRO(std::uint32_t)                   \
+  MACRO(std::uint64_t)                   \
+                                         \
+  MACRO(std::int8_t)                     \
+  MACRO(std::int16_t)                    \
+  MACRO(std::int32_t)                    \
+  MACRO(std::int64_t)                    \
+                                         \
+  MACRO(std::float16_t)                  \
+  MACRO(std::float32_t)                  \
+  MACRO(std::float64_t)                  \
+  MACRO(std::float128_t)                 \
+                                         \
   MACRO(std::bfloat16_t)
 #else
-#define DARKSIDE_FORALL_CPP_TYPE(MACRO) \
-  MACRO(bool)                           \
-                                        \
-  MACRO(std::uint8_t)                   \
-  MACRO(std::uint16_t)                  \
-  MACRO(std::uint32_t)                  \
-  MACRO(std::uint64_t)                  \
-                                        \
-  MACRO(std::int8_t)                    \
-  MACRO(std::int16_t)                   \
-  MACRO(std::int32_t)                   \
-  MACRO(std::int64_t)                   \
-                                        \
-  MACRO(float)                          \
+#define STARTORCH_FORALL_CPP_TYPE(MACRO) \
+  MACRO(bool)                            \
+                                         \
+  MACRO(std::uint8_t)                    \
+  MACRO(std::uint16_t)                   \
+  MACRO(std::uint32_t)                   \
+  MACRO(std::uint64_t)                   \
+                                         \
+  MACRO(std::int8_t)                     \
+  MACRO(std::int16_t)                    \
+  MACRO(std::int32_t)                    \
+  MACRO(std::int64_t)                    \
+                                         \
+  MACRO(float)                           \
   MACRO(double)
 #endif
 
 #if defined(__STDCPP_FLOAT16_T__)
-#define DARKSIDE_FORALL_SCALAR_TYPE_TO_CPP_TYPE(MACRO)           \
+#define STARTORCH_FORALL_SCALAR_TYPE_TO_CPP_TYPE(MACRO)          \
   MACRO(::startorch::ScalarType::kUndefined, std::monostate)     \
   MACRO(::startorch::ScalarType::kBool, bool)                    \
                                                                  \
@@ -101,7 +101,7 @@
                                                                  \
   MACRO(::startorch::ScalarType::kOptionCount, std::monostate)
 #else
-#define DARKSIDE_FORALL_SCALAR_TYPE_TO_CPP_TYPE(MACRO)          \
+#define STARTORCH_FORALL_SCALAR_TYPE_TO_CPP_TYPE(MACRO)         \
   MACRO(::startorch::ScalarType::kUndefined, std::monostate)    \
   MACRO(::startorch::ScalarType::kBool, bool)                   \
                                                                 \
@@ -122,7 +122,7 @@
 #endif
 
 #if defined(__STDCPP_FLOAT16_T__)
-#define DARKSIDE_FORALL_CPP_TYPE_TO_SCALAR_TYPE(MACRO)          \
+#define STARTORCH_FORALL_CPP_TYPE_TO_SCALAR_TYPE(MACRO)         \
   MACRO(std::monostate, ::startorch::ScalarType::kUndefined)    \
   MACRO(bool, ::startorch::ScalarType::kBool)                   \
                                                                 \
@@ -143,7 +143,7 @@
                                                                 \
   MACRO(std::bfloat16_t, ::startorch::ScalarType::kBrainFloat16)
 #else
-#define DARKSIDE_FORALL_CPP_TYPE_TO_SCALAR_TYPE(MACRO)          \
+#define STARTORCH_FORALL_CPP_TYPE_TO_SCALAR_TYPE(MACRO)         \
   MACRO(std::monostate, ::startorch::ScalarType::kUndefined)    \
   MACRO(bool, ::startorch::ScalarType::kBool)                   \
                                                                 \
@@ -161,4 +161,4 @@
   MACRO(double, ::startorch::ScalarType::kFloat64)
 #endif
 
-#endif  // !DARKSIDE_MACROS_MAPPING_HPP_
+#endif  // !STARTORCH_MACROS_MAPPING_HPP_

@@ -28,8 +28,7 @@ class Bridge {
 
   bool IsNull() const;
 
-  void Copy(darkside::Buffer& destination_buffer,
-            const darkside::Buffer& source_buffer);
+  void Copy(Buffer& destination_buffer, const Buffer& source_buffer);
 
   static Bridge& GetNull();
 

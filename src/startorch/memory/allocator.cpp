@@ -1,4 +1,4 @@
-#include "darkside/memory/allocator.hpp"
+#include "startorch/memory/allocator.hpp"
 
 #include <cuda_runtime_api.h>
 #include <driver_types.h>
@@ -6,10 +6,10 @@
 #include <cstdint>
 #include <new>
 
-#include "darkside/memory/buffer.hpp"
 #include "startorch/common/types.hpp"
+#include "startorch/memory/buffer.hpp"
 
-namespace darkside {
+namespace startorch {
 
 Allocator::Allocator(std::uint64_t bytes, startorch::MallocType type) {
   if (bytes == 0ul || type == startorch::MallocType::kUndefined ||
@@ -129,4 +129,4 @@ Allocator& Allocator::GetNull() {
   return null_instance;
 }
 
-}  // namespace darkside
+}  // namespace startorch

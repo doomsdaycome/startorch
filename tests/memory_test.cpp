@@ -2,11 +2,11 @@
 
 #include <cstdint>
 
-#include "darkside/memory/allocator.hpp"
-#include "darkside/memory/buffer.hpp"
-#include "darkside/scalar/utilities.hpp"
 #include "startorch/common/literals.hpp"
 #include "startorch/common/types.hpp"
+#include "startorch/memory/allocator.hpp"
+#include "startorch/memory/buffer.hpp"
+#include "startorch/scalar/utilities.hpp"
 
 using startorch::operator""_KB;
 using startorch::operator""_MB;
@@ -14,17 +14,17 @@ using startorch::operator""_MB;
 TEST(BufferTest, ConstructorTest) {
   std::uint64_t v0 = 0ul;
 
-  darkside::Buffer b0;
-  darkside::Buffer b1 = darkside::Buffer(&v0, SizeOfCPPType(std::uint64_t),
-                                         startorch::MallocType::kHost);
-  darkside::Buffer b2 = darkside::Buffer(nullptr, SizeOfCPPType(std::uint64_t),
-                                         startorch::MallocType::kHost);
-  darkside::Buffer b3 =
-      darkside::Buffer(&v0, 0ul, startorch::MallocType::kHost);
-  darkside::Buffer b4 = darkside::Buffer(&v0, SizeOfCPPType(std::uint64_t),
-                                         startorch::MallocType::kUndefined);
-  darkside::Buffer b5 = darkside::Buffer(&v0, SizeOfCPPType(std::uint64_t),
-                                         startorch::MallocType::kOptionCount);
+  startorch::Buffer b0;
+  startorch::Buffer b1 = startorch::Buffer(&v0, SizeOfCPPType(std::uint64_t),
+                                           startorch::MallocType::kHost);
+  startorch::Buffer b2 = startorch::Buffer(
+      nullptr, SizeOfCPPType(std::uint64_t), startorch::MallocType::kHost);
+  startorch::Buffer b3 =
+      startorch::Buffer(&v0, 0ul, startorch::MallocType::kHost);
+  startorch::Buffer b4 = startorch::Buffer(&v0, SizeOfCPPType(std::uint64_t),
+                                           startorch::MallocType::kUndefined);
+  startorch::Buffer b5 = startorch::Buffer(&v0, SizeOfCPPType(std::uint64_t),
+                                           startorch::MallocType::kOptionCount);
 
   EXPECT_EQ(b0.GetData(), nullptr);
   EXPECT_EQ(b0.GetBytes(), 0ul);
@@ -54,17 +54,17 @@ TEST(BufferTest, ConstructorTest) {
 TEST(BufferTest, OperatorBoolTest) {
   std::uint64_t v0 = 0ul;
 
-  darkside::Buffer b0;
-  darkside::Buffer b1 = darkside::Buffer(&v0, SizeOfCPPType(std::uint64_t),
-                                         startorch::MallocType::kHost);
-  darkside::Buffer b2 = darkside::Buffer(nullptr, SizeOfCPPType(std::uint64_t),
-                                         startorch::MallocType::kHost);
-  darkside::Buffer b3 =
-      darkside::Buffer(&v0, 0ul, startorch::MallocType::kHost);
-  darkside::Buffer b4 = darkside::Buffer(&v0, SizeOfCPPType(std::uint64_t),
-                                         startorch::MallocType::kUndefined);
-  darkside::Buffer b5 = darkside::Buffer(&v0, SizeOfCPPType(std::uint64_t),
-                                         startorch::MallocType::kOptionCount);
+  startorch::Buffer b0;
+  startorch::Buffer b1 = startorch::Buffer(&v0, SizeOfCPPType(std::uint64_t),
+                                           startorch::MallocType::kHost);
+  startorch::Buffer b2 = startorch::Buffer(
+      nullptr, SizeOfCPPType(std::uint64_t), startorch::MallocType::kHost);
+  startorch::Buffer b3 =
+      startorch::Buffer(&v0, 0ul, startorch::MallocType::kHost);
+  startorch::Buffer b4 = startorch::Buffer(&v0, SizeOfCPPType(std::uint64_t),
+                                           startorch::MallocType::kUndefined);
+  startorch::Buffer b5 = startorch::Buffer(&v0, SizeOfCPPType(std::uint64_t),
+                                           startorch::MallocType::kOptionCount);
 
   EXPECT_EQ(static_cast<bool>(b0), false);
   EXPECT_EQ(!b0, true);
@@ -82,10 +82,10 @@ TEST(BufferTest, GetDataTest) {
   std::uint8_t v0 = 7;
   std::uint8_t v1 = 9;
 
-  darkside::Buffer b0(&v0, SizeOfCPPType(std::uint8_t),
-                      startorch::MallocType::kPinned);
-  const darkside::Buffer b1(&v1, SizeOfCPPType(std::uint8_t),
-                            startorch::MallocType::kPinned);
+  startorch::Buffer b0(&v0, SizeOfCPPType(std::uint8_t),
+                       startorch::MallocType::kPinned);
+  const startorch::Buffer b1(&v1, SizeOfCPPType(std::uint8_t),
+                             startorch::MallocType::kPinned);
 
   EXPECT_EQ(*b0.GetData<uint8_t>(), v0);
   EXPECT_EQ(*b1.GetData<uint8_t>(), v1);
@@ -95,7 +95,7 @@ TEST(BufferTest, GetBytesTest) {
   std::uint64_t v0 = 0;
   std::uint64_t v1 = 2048ul;
 
-  darkside::Buffer b0(&v0, v1, startorch::MallocType::kHost);
+  startorch::Buffer b0(&v0, v1, startorch::MallocType::kHost);
 
   EXPECT_EQ(b0.GetBytes(), v1);
 }
@@ -108,10 +108,10 @@ TEST(BufferTest, GetMallocTypeTest) {
   startorch::MallocType t2 = startorch::MallocType::kDevice;
   startorch::MallocType t3 = startorch::MallocType::kDevice;
 
-  darkside::Buffer b0(&v0, 64ul, t0);
-  darkside::Buffer b1(&v0, 64ul, t1);
-  darkside::Buffer b2(&v0, 64ul, t2);
-  darkside::Buffer b3(&v0, 64ul, t3);
+  startorch::Buffer b0(&v0, 64ul, t0);
+  startorch::Buffer b1(&v0, 64ul, t1);
+  startorch::Buffer b2(&v0, 64ul, t2);
+  startorch::Buffer b3(&v0, 64ul, t3);
 
   EXPECT_EQ(b0.GetMallocType(), t0);
   EXPECT_EQ(b1.GetMallocType(), t1);
@@ -122,17 +122,17 @@ TEST(BufferTest, GetMallocTypeTest) {
 TEST(BufferTest, IsNullTest) {
   std::uint64_t v0 = 0ul;
 
-  darkside::Buffer b0;
-  darkside::Buffer b1 = darkside::Buffer(&v0, SizeOfCPPType(std::uint64_t),
-                                         startorch::MallocType::kHost);
-  darkside::Buffer b2 = darkside::Buffer(nullptr, SizeOfCPPType(std::uint64_t),
-                                         startorch::MallocType::kHost);
-  darkside::Buffer b3 =
-      darkside::Buffer(&v0, 0ul, startorch::MallocType::kHost);
-  darkside::Buffer b4 = darkside::Buffer(&v0, SizeOfCPPType(std::uint64_t),
-                                         startorch::MallocType::kUndefined);
-  darkside::Buffer b5 = darkside::Buffer(&v0, SizeOfCPPType(std::uint64_t),
-                                         startorch::MallocType::kUndefined);
+  startorch::Buffer b0;
+  startorch::Buffer b1 = startorch::Buffer(&v0, SizeOfCPPType(std::uint64_t),
+                                           startorch::MallocType::kHost);
+  startorch::Buffer b2 = startorch::Buffer(
+      nullptr, SizeOfCPPType(std::uint64_t), startorch::MallocType::kHost);
+  startorch::Buffer b3 =
+      startorch::Buffer(&v0, 0ul, startorch::MallocType::kHost);
+  startorch::Buffer b4 = startorch::Buffer(&v0, SizeOfCPPType(std::uint64_t),
+                                           startorch::MallocType::kUndefined);
+  startorch::Buffer b5 = startorch::Buffer(&v0, SizeOfCPPType(std::uint64_t),
+                                           startorch::MallocType::kUndefined);
 
   EXPECT_EQ(b0.IsNull(), true);
   EXPECT_EQ(b1.IsNull(), false);
@@ -142,14 +142,14 @@ TEST(BufferTest, IsNullTest) {
 }
 
 TEST(AllocatorTest, ConstructorTest) {
-  darkside::Allocator a0;
-  darkside::Allocator a1(1_MB, startorch::MallocType::kHost);
-  darkside::Allocator a2(1_MB, startorch::MallocType::kDevice);
-  darkside::Allocator a3(1_MB, startorch::MallocType::kPinned);
-  darkside::Allocator a4(1_MB, startorch::MallocType::kUnified);
-  darkside::Allocator a5(0_MB, startorch::MallocType::kHost);
-  darkside::Allocator a6(1_MB, startorch::MallocType::kUndefined);
-  darkside::Allocator a7(1_MB, startorch::MallocType::kOptionCount);
+  startorch::Allocator a0;
+  startorch::Allocator a1(1_MB, startorch::MallocType::kHost);
+  startorch::Allocator a2(1_MB, startorch::MallocType::kDevice);
+  startorch::Allocator a3(1_MB, startorch::MallocType::kPinned);
+  startorch::Allocator a4(1_MB, startorch::MallocType::kUnified);
+  startorch::Allocator a5(0_MB, startorch::MallocType::kHost);
+  startorch::Allocator a6(1_MB, startorch::MallocType::kUndefined);
+  startorch::Allocator a7(1_MB, startorch::MallocType::kOptionCount);
 
   EXPECT_EQ(a0.GetAlignedSize(), 0ul);
   EXPECT_EQ(a0.GetType(), startorch::MallocType::kUndefined);
@@ -169,8 +169,8 @@ TEST(AllocatorTest, ConstructorTest) {
 }
 
 TEST(AllocatorTest, OperatorBoolTest) {
-  darkside::Allocator a0;
-  darkside::Allocator a1(1_MB, startorch::MallocType::kHost);
+  startorch::Allocator a0;
+  startorch::Allocator a1(1_MB, startorch::MallocType::kHost);
 
   EXPECT_EQ(static_cast<bool>(a0), false);
   EXPECT_EQ(!a0, true);
@@ -180,10 +180,10 @@ TEST(AllocatorTest, OperatorBoolTest) {
 }
 
 TEST(AllocatorTest, GetBufferTest) {
-  darkside::Allocator a0;
-  darkside::Allocator a1(1_MB, startorch::MallocType::kOptionCount);
-  darkside::Allocator a2(1_MB, startorch::MallocType::kHost);
-  const darkside::Allocator a3(1_MB, startorch::MallocType::kHost);
+  startorch::Allocator a0;
+  startorch::Allocator a1(1_MB, startorch::MallocType::kOptionCount);
+  startorch::Allocator a2(1_MB, startorch::MallocType::kHost);
+  const startorch::Allocator a3(1_MB, startorch::MallocType::kHost);
 
   EXPECT_EQ(a0.GetBuffer().IsNull(), true);
   EXPECT_EQ(a1.GetBuffer().IsNull(), true);
@@ -196,18 +196,18 @@ TEST(AllocatorTest, GetBufferTest) {
 }
 
 TEST(AllocatorTest, GetOffsetTest) {
-  darkside::Allocator a0(1_MB, startorch::MallocType::kHost);
+  startorch::Allocator a0(1_MB, startorch::MallocType::kHost);
   EXPECT_EQ(a0.GetOffset(), 0ul);
 
-  darkside::Buffer b0 = a0.NewBuffer(1_KB);
+  startorch::Buffer b0 = a0.NewBuffer(1_KB);
   EXPECT_GT(a0.GetOffset(), 0ul);
   EXPECT_EQ(a0.GetOffset(), 1_KB);
 }
 
 TEST(AllocatorTest, GetAlignedSizeTest) {
-  darkside::Allocator a0(1_MB, startorch::MallocType::kHost);
-  darkside::Allocator a1(1_MB, startorch::MallocType::kDevice);
-  darkside::Allocator a2(1_MB, startorch::MallocType::kPinned);
+  startorch::Allocator a0(1_MB, startorch::MallocType::kHost);
+  startorch::Allocator a1(1_MB, startorch::MallocType::kDevice);
+  startorch::Allocator a2(1_MB, startorch::MallocType::kPinned);
 
   EXPECT_EQ(a0.GetAlignedSize(), 64ul);
   EXPECT_EQ(a1.GetAlignedSize(), 256ul);
@@ -215,17 +215,17 @@ TEST(AllocatorTest, GetAlignedSizeTest) {
 }
 
 TEST(AllocatorTest, GetTypeTest) {
-  darkside::Allocator a0(1_MB, startorch::MallocType::kHost);
-  darkside::Allocator a1(1_MB, startorch::MallocType::kDevice);
+  startorch::Allocator a0(1_MB, startorch::MallocType::kHost);
+  startorch::Allocator a1(1_MB, startorch::MallocType::kDevice);
 
   EXPECT_EQ(a0.GetType(), startorch::MallocType::kHost);
   EXPECT_EQ(a1.GetType(), startorch::MallocType::kDevice);
 }
 
 TEST(AllocatorTest, IsNullTest) {
-  darkside::Allocator a0;
-  darkside::Allocator a1(1_MB, startorch::MallocType::kHost);
-  darkside::Allocator a2(0_MB, startorch::MallocType::kHost);
+  startorch::Allocator a0;
+  startorch::Allocator a1(1_MB, startorch::MallocType::kHost);
+  startorch::Allocator a2(0_MB, startorch::MallocType::kHost);
 
   EXPECT_EQ(a0.IsNull(), true);
   EXPECT_EQ(a1.IsNull(), false);
@@ -233,49 +233,49 @@ TEST(AllocatorTest, IsNullTest) {
 }
 
 TEST(AllocatorTest, NewBufferTest) {
-  darkside::Allocator a0(1_MB, startorch::MallocType::kHost);
+  startorch::Allocator a0(1_MB, startorch::MallocType::kHost);
   EXPECT_EQ(a0.GetAlignedSize(), 64ul);
   EXPECT_EQ(a0.GetOffset(), 0ul);
 
-  darkside::Buffer b0 = a0.NewBuffer(10ul);
+  startorch::Buffer b0 = a0.NewBuffer(10ul);
   EXPECT_NE(b0.GetData(), nullptr);
   EXPECT_EQ(b0.GetBytes(), 10ul);
   EXPECT_EQ(b0.GetMallocType(), startorch::MallocType::kHost);
   EXPECT_EQ(a0.GetOffset(), 64ul);
 
-  darkside::Buffer b1 = a0.NewBuffer(100ul);
+  startorch::Buffer b1 = a0.NewBuffer(100ul);
   EXPECT_NE(b1.GetData(), nullptr);
   EXPECT_EQ(b1.GetBytes(), 100ul);
   EXPECT_EQ(a0.GetOffset(), 192ul);
 
-  darkside::Buffer b2 = a0.NewBuffer(0ul);
+  startorch::Buffer b2 = a0.NewBuffer(0ul);
   EXPECT_EQ(b2.IsNull(), true);
 
-  darkside::Allocator a1(1_MB, startorch::MallocType::kDevice);
+  startorch::Allocator a1(1_MB, startorch::MallocType::kDevice);
   EXPECT_EQ(a1.GetAlignedSize(), 256ul);
   EXPECT_EQ(a1.GetOffset(), 0ul);
 
-  darkside::Buffer b3 = a1.NewBuffer(100ul);
+  startorch::Buffer b3 = a1.NewBuffer(100ul);
   EXPECT_NE(b3.GetData(), nullptr);
   EXPECT_EQ(b3.GetBytes(), 100ul);
   EXPECT_EQ(a1.GetOffset(), 256ul);
 
-  darkside::Allocator a2(1_MB, startorch::MallocType::kUnified);
+  startorch::Allocator a2(1_MB, startorch::MallocType::kUnified);
   EXPECT_EQ(a2.GetAlignedSize(), 256ul);
   EXPECT_EQ(a2.GetOffset(), 0ul);
 
-  darkside::Buffer b4 = a2.NewBuffer(50ul);
+  startorch::Buffer b4 = a2.NewBuffer(50ul);
   EXPECT_NE(b4.GetData(), nullptr);
   EXPECT_EQ(b4.GetBytes(), 50ul);
   EXPECT_EQ(a2.GetOffset(), 256ul);
 }
 
 TEST(AllocatorTest, DeleteBufferTest) {
-  darkside::Allocator a0(1_MB, startorch::MallocType::kHost);
+  startorch::Allocator a0(1_MB, startorch::MallocType::kHost);
 
-  darkside::Buffer b0 = a0.NewBuffer(10ul);
-  darkside::Buffer b1 = a0.NewBuffer(100ul);
-  darkside::Buffer b2 = a0.NewBuffer(50ul);
+  startorch::Buffer b0 = a0.NewBuffer(10ul);
+  startorch::Buffer b1 = a0.NewBuffer(100ul);
+  startorch::Buffer b2 = a0.NewBuffer(50ul);
 
   EXPECT_EQ(a0.GetOffset(), 256ul);
 
@@ -291,11 +291,11 @@ TEST(AllocatorTest, DeleteBufferTest) {
   a0.DeleteBuffer(b0);
   EXPECT_EQ(a0.GetOffset(), 0ul);
 
-  darkside::Allocator a1(1_MB, startorch::MallocType::kDevice);
+  startorch::Allocator a1(1_MB, startorch::MallocType::kDevice);
 
-  darkside::Buffer b3 = a1.NewBuffer(10ul);
-  darkside::Buffer b4 = a1.NewBuffer(100ul);
-  darkside::Buffer b5 = a1.NewBuffer(50ul);
+  startorch::Buffer b3 = a1.NewBuffer(10ul);
+  startorch::Buffer b4 = a1.NewBuffer(100ul);
+  startorch::Buffer b5 = a1.NewBuffer(50ul);
 
   EXPECT_EQ(a1.GetOffset(), 768ul);
 
@@ -310,7 +310,7 @@ TEST(AllocatorTest, DeleteBufferTest) {
 }
 
 TEST(AllocatorTest, GetNullTest) {
-  darkside::Allocator& a0 = darkside::Allocator::GetNull();
+  startorch::Allocator& a0 = startorch::Allocator::GetNull();
 
   EXPECT_EQ(a0.IsNull(), true);
   EXPECT_EQ(a0.GetAlignedSize(), 0ul);

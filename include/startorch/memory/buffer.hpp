@@ -1,11 +1,11 @@
-#ifndef DARKSIDE_MEMORY_BUFFER_HPP_
-#define DARKSIDE_MEMORY_BUFFER_HPP_
+#ifndef STARTORCH_MEMORY_BUFFER_HPP_
+#define STARTORCH_MEMORY_BUFFER_HPP_
 
 #include <cstdint>
 
 #include "startorch/common/types.hpp"
 
-namespace darkside {
+namespace startorch {
 
 class Buffer {
  public:
@@ -41,6 +41,6 @@ class Buffer {
   startorch::MallocType malloc_type_ = startorch::MallocType::kUndefined;
 };
 
-}  // namespace darkside
+}  // namespace startorch
 
-#endif  // !DARKSIDE_MEMORY_BUFFER_HPP_
+#endif  // !STARTORCH_MEMORY_BUFFER_HPP_

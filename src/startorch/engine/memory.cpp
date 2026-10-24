@@ -2,8 +2,8 @@
 
 #include <cstdint>
 
-#include "darkside/memory/allocator.hpp"
 #include "startorch/common/types.hpp"
+#include "startorch/memory/allocator.hpp"
 
 namespace startorch {
 
@@ -54,19 +54,15 @@ Memory::operator bool() const {
   return !physical_allocator_.IsNull() || !virtual_allocator_.IsNull();
 }
 
-darkside::Allocator& Memory::GetPhysicalAllocator() {
+Allocator& Memory::GetPhysicalAllocator() { return physical_allocator_; }
+
+const Allocator& Memory::GetPhysicalAllocator() const {
   return physical_allocator_;
 }
 
-const darkside::Allocator& Memory::GetPhysicalAllocator() const {
-  return physical_allocator_;
-}
+Allocator& Memory::GetVirtualAllocator() { return virtual_allocator_; }
 
-darkside::Allocator& Memory::GetVirtualAllocator() {
-  return virtual_allocator_;
-}
-
-const darkside::Allocator& Memory::GetVirtualAllocator() const {
+const Allocator& Memory::GetVirtualAllocator() const {
   return virtual_allocator_;
 }
 

@@ -60,8 +60,7 @@ BridgeType Bridge::GetType() const { return type_; }
 
 bool Bridge::IsNull() const { return !(*this); }
 
-void Bridge::Copy(darkside::Buffer& destination_buffer,
-                  const darkside::Buffer& source_buffer) {
+void Bridge::Copy(Buffer& destination_buffer, const Buffer& source_buffer) {
   if (destination_buffer.IsNull() || source_buffer.IsNull()) return;
 
   std::uint64_t bytes =

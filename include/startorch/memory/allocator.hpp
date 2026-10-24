@@ -1,12 +1,12 @@
-#ifndef DARKSIDE_MEMORY_ALLOCATOR_HPP_
-#define DARKSIDE_MEMORY_ALLOCATOR_HPP_
+#ifndef STARTORCH_MEMORY_ALLOCATOR_HPP_
+#define STARTORCH_MEMORY_ALLOCATOR_HPP_
 
 #include <cstdint>
 
-#include "darkside/memory/buffer.hpp"
 #include "startorch/common/types.hpp"
+#include "startorch/memory/buffer.hpp"
 
-namespace darkside {
+namespace startorch {
 
 class Allocator {
  public:
@@ -41,6 +41,6 @@ class Allocator {
   std::uint64_t aligned_size_ = 0ul;
 };
 
-}  // namespace darkside
+}  // namespace startorch
 
-#endif  // !DARKSIDE_MEMORY_ALLOCATOR_HPP_
+#endif  // !STARTORCH_MEMORY_ALLOCATOR_HPP_

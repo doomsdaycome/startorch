@@ -1,15 +1,15 @@
-#include "darkside/memory/buffer.hpp"
+#include "startorch/memory/buffer.hpp"
 
 #include <cstdint>
 
-#include "darkside/macros/mapping.hpp"
 #include "startorch/common/types.hpp"
+#include "startorch/macros/mapping.hpp"
 
-#define DARKSIDE_DEF_BUFFER_GET_DATA(C) \
-  template C* Buffer::GetData<C>();     \
+#define STARTORCH_DEF_BUFFER_GET_DATA(C) \
+  template C* Buffer::GetData<C>();      \
   template const C* Buffer::GetData<C>() const;
 
-namespace darkside {
+namespace startorch {
 
 Buffer::Buffer(void* data, std::uint64_t bytes,
                startorch::MallocType malloc_type)
@@ -39,7 +39,7 @@ const P* Buffer::GetData() const {
   return static_cast<const P*>(data_);
 }
 
-DARKSIDE_FORALL_CPP_TYPE(DARKSIDE_DEF_BUFFER_GET_DATA)
+STARTORCH_FORALL_CPP_TYPE(STARTORCH_DEF_BUFFER_GET_DATA)
 
 void* Buffer::GetData() { return data_; }
 
@@ -56,4 +56,4 @@ Buffer& Buffer::GetNull() {
   return null_instance;
 }
 
-}  // namespace darkside
+}  // namespace startorch
