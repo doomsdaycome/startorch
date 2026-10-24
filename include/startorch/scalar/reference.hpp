@@ -1,16 +1,11 @@
-// i'm a goldfish. scalar reference is not really a ref, it just let you view
-// thing inside scalar and support operator
-
-#ifndef STARTORCH_SCALAR_REFERENCE
-#define STARTORCH_SCALAR_REFERENCE
+#ifndef STARTORCH_SCALAR_REFERENCE_HPP_
+#define STARTORCH_SCALAR_REFERENCE_HPP_
 
 namespace startorch {
 
-class Reference {
- public:
- private:
-};
+class Reference;
+class ConstReference;
 
 }  // namespace startorch
 
-#endif  // !STARTORCH_SCALAR_REFERENCE
+#endif  // !STARTORCH_SCALAR_REFERENCE_HPP_
