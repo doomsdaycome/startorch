@@ -14,12 +14,11 @@ TEST(BufferTest, ConstructorTest) {
   std::uint64_t v0 = 0ul;
 
   Buffer b0;
-  Buffer b1 = Buffer(&v0, SizeOfCPPType(std::uint64_t), MallocType::kHost);
-  Buffer b2 = Buffer(nullptr, SizeOfCPPType(std::uint64_t), MallocType::kHost);
-  Buffer b3 = Buffer(&v0, 0ul, MallocType::kHost);
-  Buffer b4 = Buffer(&v0, SizeOfCPPType(std::uint64_t), MallocType::kUndefined);
-  Buffer b5 =
-      Buffer(&v0, SizeOfCPPType(std::uint64_t), MallocType::kOptionCount);
+  Buffer b1(&v0, SizeOfCPPType(std::uint64_t), MallocType::kHost);
+  Buffer b2(nullptr, SizeOfCPPType(std::uint64_t), MallocType::kHost);
+  Buffer b3(&v0, 0ul, MallocType::kHost);
+  Buffer b4(&v0, SizeOfCPPType(std::uint64_t), MallocType::kUndefined);
+  Buffer b5(&v0, SizeOfCPPType(std::uint64_t), MallocType::kOptionCount);
 
   EXPECT_EQ(b0.GetData(), nullptr);
   EXPECT_EQ(b0.GetBytes(), 0ul);
@@ -50,12 +49,11 @@ TEST(BufferTest, OperatorBoolTest) {
   std::uint64_t v0 = 0ul;
 
   Buffer b0;
-  Buffer b1 = Buffer(&v0, SizeOfCPPType(std::uint64_t), MallocType::kHost);
-  Buffer b2 = Buffer(nullptr, SizeOfCPPType(std::uint64_t), MallocType::kHost);
-  Buffer b3 = Buffer(&v0, 0ul, MallocType::kHost);
-  Buffer b4 = Buffer(&v0, SizeOfCPPType(std::uint64_t), MallocType::kUndefined);
-  Buffer b5 =
-      Buffer(&v0, SizeOfCPPType(std::uint64_t), MallocType::kOptionCount);
+  Buffer b1(&v0, SizeOfCPPType(std::uint64_t), MallocType::kHost);
+  Buffer b2(nullptr, SizeOfCPPType(std::uint64_t), MallocType::kHost);
+  Buffer b3(&v0, 0ul, MallocType::kHost);
+  Buffer b4(&v0, SizeOfCPPType(std::uint64_t), MallocType::kUndefined);
+  Buffer b5(&v0, SizeOfCPPType(std::uint64_t), MallocType::kOptionCount);
 
   EXPECT_EQ(static_cast<bool>(b0), false);
   EXPECT_EQ(!b0, true);
@@ -112,11 +110,11 @@ TEST(BufferTest, IsNullTest) {
   std::uint64_t v0 = 0ul;
 
   Buffer b0;
-  Buffer b1 = Buffer(&v0, SizeOfCPPType(std::uint64_t), MallocType::kHost);
-  Buffer b2 = Buffer(nullptr, SizeOfCPPType(std::uint64_t), MallocType::kHost);
-  Buffer b3 = Buffer(&v0, 0ul, MallocType::kHost);
-  Buffer b4 = Buffer(&v0, SizeOfCPPType(std::uint64_t), MallocType::kUndefined);
-  Buffer b5 = Buffer(&v0, SizeOfCPPType(std::uint64_t), MallocType::kUndefined);
+  Buffer b1(&v0, SizeOfCPPType(std::uint64_t), MallocType::kHost);
+  Buffer b2(nullptr, SizeOfCPPType(std::uint64_t), MallocType::kHost);
+  Buffer b3(&v0, 0ul, MallocType::kHost);
+  Buffer b4(&v0, SizeOfCPPType(std::uint64_t), MallocType::kUndefined);
+  Buffer b5(&v0, SizeOfCPPType(std::uint64_t), MallocType::kUndefined);
 
   EXPECT_EQ(b0.IsNull(), true);
   EXPECT_EQ(b1.IsNull(), false);
