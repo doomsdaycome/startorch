@@ -1,21 +1,45 @@
 #include <cstdint>
 #include <iostream>
 
-#include "startorch/common/literals.hpp"
 #include "startorch/common/types.hpp"
 #include "startorch/common/utilities.hpp"
+#include "startorch/common/variables.hpp"
+#include "startorch/engine/bridge.hpp"
 #include "startorch/engine/system.hpp"
 
 int main(int argc, char* argv[]) {
-  std::cout << "Sigillum Dei Aemeath" << std::endl;
+  uint8_t sym[] = "Sigillum Dei Aemeath";
+  uint64_t len = 20ul;
 
-  startorch::System cpu(0, 512_KB, 128_KB, startorch::SystemType::kHost);
-  startorch::System gpu(0, 512_KB, 128_KB, startorch::SystemType::kDevice);
+  auto src = startorch::kDefaultHostSystem.GetMemory()
+                 .GetPhysicalAllocator()
+                 .NewBuffer(startorch::SizeOfScalarType(
+                                startorch::ScalarType::kUnsignedInt8) *
+                            len);
 
-  auto buffer = cpu.GetMemory().GetPhysicalAllocator().NewBuffer(
-      startorch::SizeOfScalarType(startorch::ScalarType::kUnsignedInt32));
+  auto dst = startorch::kDefaultDeviceSystem.GetMemory()
+                 .GetPhysicalAllocator()
+                 .NewBuffer(startorch::SizeOfScalarType(
+                                startorch::ScalarType::kUnsignedInt8) *
+                            len);
 
-  buffer.GetData<uint32_t>();
+  auto res = startorch::kDefaultHostSystem.GetMemory()
+                 .GetPhysicalAllocator()
+                 .NewBuffer(startorch::SizeOfScalarType(
+                                startorch::ScalarType::kUnsignedInt8) *
+                            len);
+
+  for (uint64_t i = 0; i < len; i++) src.GetData<uint8_t>()[i] = sym[i];
+
+  startorch::Bridge(startorch::kDefaultDeviceSystem,
+                    startorch::kDefaultHostSystem)
+      .Copy(dst, src);
+
+  startorch::Bridge(startorch::kDefaultHostSystem,
+                    startorch::kDefaultDeviceSystem)
+      .Copy(res, dst);
+
+  std::cout << res.GetData<uint8_t>();
 
   return 0;
 }

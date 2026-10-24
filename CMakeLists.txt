@@ -39,6 +39,7 @@ target_sources(
         src/startorch/memory/allocator.cpp
         src/startorch/memory/buffer.cpp
         src/startorch/common/utilities.cpp
+        src/startorch/common/variables.cpp
         src/startorch/engine/bridge.cpp
         src/startorch/engine/memory.cpp
         src/startorch/engine/system.cpp
