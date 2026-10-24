@@ -38,7 +38,7 @@ target_sources(
     PRIVATE
         src/startorch/memory/allocator.cpp
         src/startorch/memory/buffer.cpp
-        src/startorch/scalar/utilities.cpp
+        src/startorch/common/utilities.cpp
         src/startorch/engine/bridge.cpp
         src/startorch/engine/memory.cpp
         src/startorch/engine/system.cpp

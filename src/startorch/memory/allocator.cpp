@@ -11,30 +11,30 @@
 
 namespace startorch {
 
-Allocator::Allocator(std::uint64_t bytes, startorch::MallocType type) {
-  if (bytes == 0ul || type == startorch::MallocType::kUndefined ||
-      type == startorch::MallocType::kOptionCount)
+Allocator::Allocator(std::uint64_t bytes, MallocType type) {
+  if (bytes == 0ul || type == MallocType::kUndefined ||
+      type == MallocType::kOptionCount)
     return;
 
   void* data = nullptr;
 
   switch (type) {
-    case startorch::MallocType::kHost:
+    case MallocType::kHost:
       data = static_cast<void*>(new (std::nothrow) std::uint8_t[bytes]);
       aligned_size_ = 64ul;
       break;
 
-    case startorch::MallocType::kDevice:
+    case MallocType::kDevice:
       if (cudaMalloc(&data, bytes) != cudaSuccess) data = nullptr;
       aligned_size_ = 256ul;
       break;
 
-    case startorch::MallocType::kPinned:
+    case MallocType::kPinned:
       if (cudaMallocHost(&data, bytes) != cudaSuccess) data = nullptr;
       aligned_size_ = 4096ul;
       break;
 
-    case startorch::MallocType::kUnified:
+    case MallocType::kUnified:
       if (cudaMallocManaged(&data, bytes) != cudaSuccess) data = nullptr;
       aligned_size_ = 256ul;
       break;
@@ -57,16 +57,16 @@ Allocator::~Allocator() {
   void* data = buffer_.GetData();
 
   switch (buffer_.GetMallocType()) {
-    case startorch::MallocType::kHost:
+    case MallocType::kHost:
       delete[] static_cast<std::uint8_t*>(data);
       break;
 
-    case startorch::MallocType::kPinned:
+    case MallocType::kPinned:
       cudaFreeHost(data);
       break;
 
-    case startorch::MallocType::kDevice:
-    case startorch::MallocType::kUnified:
+    case MallocType::kDevice:
+    case MallocType::kUnified:
       cudaFree(data);
       break;
 
@@ -87,9 +87,7 @@ std::uint64_t Allocator::GetOffset() const { return offset_; }
 
 std::uint64_t Allocator::GetAlignedSize() const { return aligned_size_; }
 
-startorch::MallocType Allocator::GetType() const {
-  return buffer_.GetMallocType();
-}
+MallocType Allocator::GetType() const { return buffer_.GetMallocType(); }
 
 bool Allocator::IsNull() const { return !(*this); }
 

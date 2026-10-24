@@ -12,7 +12,7 @@ class Buffer {
   Buffer() = default;
   Buffer(Buffer&& other) noexcept = default;
   Buffer(const Buffer& other) = default;
-  Buffer(void* data, std::uint64_t bytes, startorch::MallocType malloc_type);
+  Buffer(void* data, std::uint64_t bytes, MallocType malloc_type);
 
   ~Buffer() = default;
 
@@ -29,7 +29,7 @@ class Buffer {
   void* GetData();
   const void* GetData() const;
   std::uint64_t GetBytes() const;
-  startorch::MallocType GetMallocType() const;
+  MallocType GetMallocType() const;
 
   bool IsNull() const;
 
@@ -38,7 +38,7 @@ class Buffer {
  private:
   void* data_ = nullptr;
   std::uint64_t bytes_ = 0ul;
-  startorch::MallocType malloc_type_ = startorch::MallocType::kUndefined;
+  MallocType malloc_type_ = MallocType::kUndefined;
 };
 
 }  // namespace startorch

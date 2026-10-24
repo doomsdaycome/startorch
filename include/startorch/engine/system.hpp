@@ -13,7 +13,7 @@ class System {
   System() = default;
   System(System&& other) noexcept = delete;
   System(const System& other) = delete;
-  System(std::uint64_t index_, std::uint64_t physical_bytes,
+  System(std::uint64_t index, std::uint64_t physical_bytes,
          std::uint64_t virtual_bytes, SystemType system_type);
 
   ~System() = default;

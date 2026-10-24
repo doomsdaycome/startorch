@@ -7,33 +7,33 @@
 
 namespace startorch {
 
-startorch::MallocType GetPhysicalMallocType(SystemType system_type) {
+MallocType GetPhysicalMallocType(SystemType system_type) {
   switch (system_type) {
     case SystemType::kHost:
-      return startorch::MallocType::kHost;
+      return MallocType::kHost;
 
     case SystemType::kDevice:
-      return startorch::MallocType::kDevice;
+      return MallocType::kDevice;
 
     default:
-      return startorch::MallocType::kUndefined;
+      return MallocType::kUndefined;
   }
 }
 
-startorch::MallocType GetVirtualMallocType(SystemType system_type) {
+MallocType GetVirtualMallocType(SystemType system_type) {
   switch (system_type) {
     case SystemType::kHost:
-      return startorch::MallocType::kPinned;
+      return MallocType::kPinned;
 
     case SystemType::kDevice:
-      return startorch::MallocType::kUnified;
+      return MallocType::kUnified;
 
     default:
-      return startorch::MallocType::kUndefined;
+      return MallocType::kUndefined;
   }
 }
 
-constexpr SystemType GetValidSystemType(SystemType system_type) noexcept {
+SystemType GetValidSystemType(SystemType system_type) {
   switch (system_type) {
     case SystemType::kHost:
     case SystemType::kDevice:

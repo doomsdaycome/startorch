@@ -17,7 +17,7 @@
 namespace startorch {
 
 template <typename Fn>
-decltype(auto) DispatchScalarType(startorch::ScalarType scalar_type, Fn&& fn) {
+decltype(auto) DispatchScalarType(ScalarType scalar_type, Fn&& fn) {
   switch (scalar_type) {
     STARTORCH_FORALL_SCALAR_TYPE_TO_CPP_TYPE(
         STARTORCH_DISPATCH_SCALAR_TYPE_CASE)

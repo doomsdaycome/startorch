@@ -4,12 +4,9 @@
 
 #include "startorch/common/literals.hpp"
 #include "startorch/common/types.hpp"
+#include "startorch/common/utilities.hpp"
 #include "startorch/memory/allocator.hpp"
 #include "startorch/memory/buffer.hpp"
-#include "startorch/scalar/utilities.hpp"
-
-using startorch::operator""_KB;
-using startorch::operator""_MB;
 
 TEST(BufferTest, ConstructorTest) {
   std::uint64_t v0 = 0ul;

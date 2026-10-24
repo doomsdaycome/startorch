@@ -1,4 +1,4 @@
-#include "startorch/scalar/utilities.hpp"
+#include "startorch/common/utilities.hpp"
 
 #include <cstdint>
 #include <type_traits>
@@ -9,7 +9,7 @@
 
 namespace startorch {
 
-std::uint64_t SizeOfScalarType(startorch::ScalarType scalar_type) {
+std::uint64_t SizeOfScalarType(ScalarType scalar_type) {
   return STARTORCH_DISPATCH_SCALAR_TYPE(scalar_type, C, {
     if constexpr (std::is_same_v<C, std::monostate>)
       return 0ul;

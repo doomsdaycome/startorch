@@ -13,7 +13,7 @@ class Allocator {
   Allocator() = default;
   Allocator(Allocator&& other) noexcept = delete;
   Allocator(const Allocator& other) = delete;
-  Allocator(std::uint64_t bytes, startorch::MallocType type);
+  Allocator(std::uint64_t bytes, MallocType type);
 
   ~Allocator();
 
@@ -26,7 +26,7 @@ class Allocator {
   const Buffer& GetBuffer() const;
   std::uint64_t GetOffset() const;
   std::uint64_t GetAlignedSize() const;
-  startorch::MallocType GetType() const;
+  MallocType GetType() const;
 
   bool IsNull() const;
 

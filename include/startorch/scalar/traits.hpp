@@ -4,10 +4,10 @@
 #include "startorch/common/types.hpp"
 #include "startorch/macros/mapping.hpp"
 
-#define STARTORCH_DEF_CPP_TYPE_TRAITS(C, S)           \
-  template <>                                         \
-  struct CppTypeTraits<C> {                           \
-    static constexpr startorch::ScalarType value = S; \
+#define STARTORCH_DEF_CPP_TYPE_TRAITS(C, S) \
+  template <>                               \
+  struct CppTypeTraits<C> {                 \
+    static constexpr ScalarType value = S;  \
   };
 
 #define STARTORCH_DEF_SCALAR_TYPE_TRAITS(S, C) \
@@ -21,7 +21,7 @@ namespace startorch {
 template <typename C>
 struct CppTypeTraits;
 
-template <startorch::ScalarType S>
+template <ScalarType S>
 struct ScalarTypeTraits;
 
 STARTORCH_FORALL_CPP_TYPE_TO_SCALAR_TYPE(STARTORCH_DEF_CPP_TYPE_TRAITS)
