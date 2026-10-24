@@ -1,27 +1,34 @@
 cmake_minimum_required(VERSION 3.23)
 
-project(startorch VERSION 0.1.0 LANGUAGES CXX CUDA)
+option(ENABLE_CUDA "Enable CUDA support for startorch" ON)
+option(ENABLE_GITHUB_ACTIONS "Enable test for GitHub Actions environment" OFF)
+option(BUILD_SHARED_LIBS "Build startorch as a shared library" ON)
+option(BUILD_TESTS "Build startorch unit tests" ON)
+option(BUILD_EXAMPLES "Build startorch example binaries" ON)
+
+if(ENABLE_CUDA)
+    project(startorch VERSION 0.1.0 LANGUAGES CXX CUDA)
+    set(CMAKE_CUDA_STANDARD 17)
+    set(CMAKE_CUDA_STANDARD_REQUIRED YES)
+    set(CMAKE_CUDA_EXTENSIONS OFF)
+else()
+    project(startorch VERSION 0.1.0 LANGUAGES CXX)
+endif()
 
 set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CUDA_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
-set(CMAKE_CUDA_STANDARD_REQUIRED YES)
-
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CUDA_EXTENSIONS OFF)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-find_package(CUDAToolkit REQUIRED)
+if(ENABLE_CUDA)
+    find_package(CUDAToolkit REQUIRED)
 
-if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
-    set(CMAKE_CUDA_ARCHITECTURES "native")
+    if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+        set(CMAKE_CUDA_ARCHITECTURES "native")
+    endif()
 endif()
-
-option(BUILD_SHARED_LIBS "Build startorch as a shared library" ON)
-option(BUILD_TESTS "Build startorch unit tests" ON)
-option(BUILD_EXAMPLES "Build startorch example binaries" ON)
 
 add_library(startorch)
 add_library(startorch::startorch ALIAS startorch)
@@ -48,12 +55,19 @@ target_include_directories(
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_link_libraries(startorch PRIVATE CUDA::cudart)
+if(ENABLE_CUDA)
+    target_compile_definitions(startorch PUBLIC STARTORCH_ENABLE_CUDA=1)
+    target_link_libraries(startorch PRIVATE CUDA::cudart)
 
-set_target_properties(
-    startorch
-    PROPERTIES CUDA_SEPARABLE_COMPILATION OFF CUDA_RESOLVE_DEVICE_SYMBOLS OFF
-)
+    set_target_properties(
+        startorch
+        PROPERTIES
+            CUDA_SEPARABLE_COMPILATION OFF
+            CUDA_RESOLVE_DEVICE_SYMBOLS OFF
+    )
+else()
+    target_compile_definitions(startorch PUBLIC STARTORCH_ENABLE_CUDA=0)
+endif()
 
 if(BUILD_SHARED_LIBS)
     include(GenerateExportHeader)

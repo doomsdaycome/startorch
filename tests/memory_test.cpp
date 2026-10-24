@@ -270,7 +270,7 @@ TEST(AllocatorTest, NewBufferTest) {
   EXPECT_EQ(a2.GetOffset(), 256ul);
 }
 
-TEST(AllocatorTest, StackedDeleteBufferTest) {
+TEST(AllocatorTest, DeleteBufferTest) {
   darkside::Allocator a0(1_MB, startorch::MallocType::kHost);
 
   darkside::Buffer b0 = a0.NewBuffer(10ul);
