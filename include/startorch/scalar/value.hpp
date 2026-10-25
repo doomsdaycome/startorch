@@ -9,22 +9,26 @@ namespace startorch {
 
 class Value {
  public:
-  Value() = default;
+  Value();
   Value(Value&& other) noexcept;
   Value(const Value& other);
-  Value(CPPType value);
-  Value(CPPType value, System& system);
-  Value(ScalarType scalar_type, System& system);
+  Value(ScalarType type, System& system);
 
   ~Value();
 
-  Value& operator=(Value&&);
-  Value& operator=(const Value&);
+  Value& operator=(Value&& other) noexcept;
+  Value& operator=(const Value& other);
+
+  explicit operator bool() const;
+
+  bool IsNull() const;
+
+  static Value& GetNull();
 
  private:
-  Buffer buffer_ = Buffer();
-  ScalarType type_ = ScalarType::kUndefined;
-  System* system_data_ = nullptr;
+  Buffer buffer_;
+  ScalarType type_;
+  System* system_data_;
 };
 
 class ConstValue;

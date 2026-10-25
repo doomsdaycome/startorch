@@ -9,14 +9,14 @@ namespace startorch {
 class Bridge {
  public:
   Bridge();
-  Bridge(Bridge&& other) noexcept;
-  Bridge(const Bridge& other);
+  Bridge(Bridge&& other) noexcept = default;
+  Bridge(const Bridge& other) = default;
   Bridge(System& destination_system, const System& source_system);
 
   ~Bridge() = default;
 
-  Bridge& operator=(Bridge&& other) noexcept = delete;
-  Bridge& operator=(const Bridge& other) = delete;
+  Bridge& operator=(Bridge&& other) noexcept = default;
+  Bridge& operator=(const Bridge& other) = default;
 
   explicit operator bool() const;
 
@@ -33,8 +33,8 @@ class Bridge {
   static Bridge& GetNull();
 
  private:
-  System& destination_system_;
-  const System& source_system_;
+  System* destination_system_data_;
+  const System* source_system_data_;
   BridgeType type_;
 };
 
