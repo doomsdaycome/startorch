@@ -10,7 +10,7 @@ namespace startorch {
 
 class Allocator {
  public:
-  Allocator() = default;
+  Allocator();
   Allocator(Allocator&& other) noexcept = delete;
   Allocator(const Allocator& other) = delete;
   Allocator(std::uint64_t bytes, MallocType type);
@@ -36,9 +36,9 @@ class Allocator {
   static Allocator& GetNull();
 
  private:
-  Buffer buffer_ = Buffer();
-  std::uint64_t offset_ = 0ul;
-  std::uint64_t aligned_size_ = 0ul;
+  Buffer buffer_;
+  std::uint64_t offset_;
+  std::uint64_t aligned_size_;
 };
 
 }  // namespace startorch

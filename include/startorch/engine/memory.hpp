@@ -10,7 +10,7 @@ namespace startorch {
 
 class Memory {
  public:
-  Memory() = default;
+  Memory();
   Memory(Memory&& other) noexcept = delete;
   Memory(const Memory& other) = delete;
   Memory(std::uint64_t physical_bytes, std::uint64_t virtual_bytes,
@@ -36,7 +36,7 @@ class Memory {
  private:
   Allocator physical_allocator_;
   Allocator virtual_allocator_;
-  SystemType system_type_ = SystemType::kUndefined;
+  SystemType system_type_;
 };
 
 }  // namespace startorch

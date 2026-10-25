@@ -9,7 +9,7 @@ namespace startorch {
 
 class Buffer {
  public:
-  Buffer() = default;
+  Buffer();
   Buffer(Buffer&& other) noexcept = default;
   Buffer(const Buffer& other) = default;
   Buffer(void* data, std::uint64_t bytes, MallocType malloc_type);
@@ -36,9 +36,9 @@ class Buffer {
   static Buffer& GetNull();
 
  private:
-  void* data_ = nullptr;
-  std::uint64_t bytes_ = 0ul;
-  MallocType malloc_type_ = MallocType::kUndefined;
+  void* data_;
+  std::uint64_t bytes_;
+  MallocType malloc_type_;
 };
 
 }  // namespace startorch

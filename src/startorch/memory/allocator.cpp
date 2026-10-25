@@ -11,7 +11,10 @@
 
 namespace startorch {
 
-Allocator::Allocator(std::uint64_t bytes, MallocType type) {
+Allocator::Allocator()
+    : buffer_(Buffer::GetNull()), offset_(0ul), aligned_size_(0ul) {}
+
+Allocator::Allocator(std::uint64_t bytes, MallocType type) : Allocator() {
   if (bytes == 0ul || type == MallocType::kUndefined ||
       type == MallocType::kOptionCount)
     return;

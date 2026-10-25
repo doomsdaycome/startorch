@@ -7,23 +7,36 @@
 #include <cstring>
 
 #include "startorch/common/types.hpp"
+#include "startorch/common/variables.hpp"
 #include "startorch/engine/system.hpp"
 
 namespace startorch {
 
+Bridge::Bridge()
+    : destination_system_(kDefaultHostSystem),
+      source_system_(kDefaultHostSystem),
+      type_(BridgeType::kHostToHost) {}
+
+Bridge::Bridge(Bridge&& other) noexcept
+    : destination_system_(other.destination_system_),
+      source_system_(other.source_system_),
+      type_(other.type_) {}
+
+Bridge::Bridge(const Bridge& other)
+    : destination_system_(other.destination_system_),
+      source_system_(other.source_system_),
+      type_(other.type_) {}
+
 Bridge::Bridge(System& destination_system, const System& source_system)
-    : destination_system_data_(&destination_system),
-      source_system_data_(&source_system),
+    : destination_system_(destination_system),
+      source_system_(source_system),
       type_(BridgeType::kUndefined) {
-  if (destination_system_data_->IsNull() || source_system_data_->IsNull()) {
-    destination_system_data_ = nullptr;
-    source_system_data_ = nullptr;
+  if (destination_system_.IsNull() || source_system_.IsNull()) {
     return;
   }
 
-  const SystemType destination_system_type =
-      destination_system_data_->GetType();
-  const SystemType source_system_type = source_system_data_->GetType();
+  const SystemType destination_system_type = destination_system_.GetType();
+  const SystemType source_system_type = source_system_.GetType();
 
   if (destination_system_type == SystemType::kHost) {
     if (source_system_type == SystemType::kHost)
@@ -39,23 +52,17 @@ Bridge::Bridge(System& destination_system, const System& source_system)
 }
 
 Bridge::operator bool() const {
-  return destination_system_data_ && source_system_data_ &&
-         !destination_system_data_->IsNull() && !source_system_data_->IsNull();
+  return !destination_system_.IsNull() && !source_system_.IsNull();
 }
 
-System& Bridge::GetDestinationSystem() {
-  if (destination_system_data_ == nullptr) return System::GetNull();
-
-  return *destination_system_data_;
-}
+System& Bridge::GetDestinationSystem() { return destination_system_; }
 
 const System& Bridge::GetDestinationSystem() const {
-  if (destination_system_data_ == nullptr) return System::GetNull();
-
-  return *destination_system_data_;
+  return destination_system_;
 }
 
-const System& Bridge::GetSourceSystem() const { return *source_system_data_; }
+const System& Bridge::GetSourceSystem() const { return source_system_; }
+
 BridgeType Bridge::GetType() const { return type_; }
 
 bool Bridge::IsNull() const { return !(*this); }

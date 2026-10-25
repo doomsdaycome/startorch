@@ -7,6 +7,8 @@
 
 namespace startorch {
 
+System::System() : index_(0ul), memory_() {}
+
 System::System(std::uint64_t index, std::uint64_t physical_bytes,
                std::uint64_t virtual_bytes, SystemType system_type)
     : index_(index), memory_(physical_bytes, virtual_bytes, system_type) {}

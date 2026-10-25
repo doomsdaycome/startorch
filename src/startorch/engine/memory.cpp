@@ -7,6 +7,11 @@
 
 namespace startorch {
 
+Memory::Memory()
+    : physical_allocator_(),
+      virtual_allocator_(),
+      system_type_(SystemType::kUndefined) {}
+
 MallocType GetPhysicalMallocType(SystemType system_type) {
   switch (system_type) {
     case SystemType::kHost:

@@ -11,15 +11,19 @@
 
 namespace startorch {
 
+Buffer::Buffer()
+    : data_(nullptr), bytes_(0ul), malloc_type_(MallocType::kUndefined) {}
+
 Buffer::Buffer(void* data, std::uint64_t bytes, MallocType malloc_type)
-    : data_(data), bytes_(bytes), malloc_type_(malloc_type) {
-  if (data_ == nullptr || bytes_ == 0ul ||
-      malloc_type_ == MallocType::kUndefined ||
-      malloc_type_ == MallocType::kOptionCount) {
-    data_ = nullptr;
-    bytes_ = 0ul;
-    malloc_type_ = MallocType::kUndefined;
-  }
+    : Buffer() {
+  if (data == nullptr || bytes == 0ul ||
+      malloc_type == MallocType::kUndefined ||
+      malloc_type == MallocType::kOptionCount)
+    return;
+
+  data_ = data;
+  bytes_ = bytes;
+  malloc_type_ = malloc_type;
 }
 
 Buffer::operator bool() const {

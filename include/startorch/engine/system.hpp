@@ -10,7 +10,7 @@ namespace startorch {
 
 class System {
  public:
-  System() = default;
+  System();
   System(System&& other) noexcept = delete;
   System(const System& other) = delete;
   System(std::uint64_t index, std::uint64_t physical_bytes,
@@ -33,7 +33,7 @@ class System {
   static System& GetNull();
 
  private:
-  std::uint64_t index_ = 0ul;
+  std::uint64_t index_;
   Memory memory_;
 };
 
