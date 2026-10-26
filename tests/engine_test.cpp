@@ -4,6 +4,7 @@
 #include "startorch/common/types.hpp"
 #include "startorch/engine/memory.hpp"
 #include "startorch/engine/system.hpp"
+#include "startorch/memory/buffer.hpp"
 
 namespace startorch {
 
@@ -168,6 +169,35 @@ TEST(SystemTest, GetNullTest) {
   EXPECT_EQ(s0.GetIndex(), 0ul);
   EXPECT_EQ(s0.GetType(), SystemType::kUndefined);
   EXPECT_EQ(s0.GetMemory().IsNull(), true);
+}
+
+TEST(SystemTest, NewBufferTest) {
+  System s0(0, 1_MB, 1_MB, SystemType::kHost);
+  System s1(0, 1_MB, 1_MB, SystemType::kDevice);
+
+  Buffer b0 = s0.NewBuffer(10ul, MallocType::kHost);
+  Buffer b1 = s0.NewBuffer(10ul, MallocType::kPinned);
+  Buffer b2 = s0.NewBuffer(10ul, MallocType::kDevice);
+
+  Buffer b3 = s1.NewBuffer(10ul, MallocType::kDevice);
+  Buffer b4 = s1.NewBuffer(10ul, MallocType::kUnified);
+  Buffer b5 = s1.NewBuffer(10ul, MallocType::kHost);
+
+  EXPECT_EQ(!b0, false);
+  EXPECT_EQ(b0.GetMallocType(), MallocType::kHost);
+
+  EXPECT_EQ(!b1, false);
+  EXPECT_EQ(b1.GetMallocType(), MallocType::kPinned);
+
+  EXPECT_EQ(!b2, true);
+
+  EXPECT_EQ(!b3, false);
+  EXPECT_EQ(b3.GetMallocType(), MallocType::kDevice);
+
+  EXPECT_EQ(!b4, false);
+  EXPECT_EQ(b4.GetMallocType(), MallocType::kUnified);
+
+  EXPECT_EQ(!b5, true);
 }
 
 }  // namespace startorch

@@ -5,6 +5,7 @@
 
 #include "startorch/common/types.hpp"
 #include "startorch/engine/memory.hpp"
+#include "startorch/memory/buffer.hpp"
 
 namespace startorch {
 
@@ -27,6 +28,9 @@ class System {
   Memory& GetMemory();
   const Memory& GetMemory() const;
   SystemType GetType() const;
+
+  Buffer NewBuffer(std::uint64_t bytes, MallocType malloc_type);
+  void DeleteBuffer(Buffer& buffer);
 
   bool IsNull() const;
 

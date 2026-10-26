@@ -4,6 +4,7 @@
 
 #include "startorch/common/types.hpp"
 #include "startorch/engine/memory.hpp"
+#include "startorch/memory/buffer.hpp"
 
 namespace startorch {
 
@@ -22,6 +23,64 @@ Memory& System::GetMemory() { return memory_; }
 const Memory& System::GetMemory() const { return memory_; }
 
 SystemType System::GetType() const { return memory_.GetSystemType(); }
+
+Buffer System::NewBuffer(std::uint64_t bytes, MallocType malloc_type) {
+  if (bytes == 0ul || malloc_type == MallocType::kUndefined ||
+      malloc_type == MallocType::kOptionCount)
+    return Buffer::GetNull();
+
+  switch (malloc_type) {
+    case MallocType::kHost:
+      if (memory_.GetSystemType() != SystemType::kHost) break;
+      return memory_.GetPhysicalAllocator().NewBuffer(bytes);
+
+    case MallocType::kPinned:
+      if (memory_.GetSystemType() != SystemType::kHost) break;
+      return memory_.GetVirtualAllocator().NewBuffer(bytes);
+
+    case MallocType::kDevice:
+      if (memory_.GetSystemType() != SystemType::kDevice) break;
+      return memory_.GetPhysicalAllocator().NewBuffer(bytes);
+
+    case MallocType::kUnified:
+      if (memory_.GetSystemType() != SystemType::kDevice) break;
+      return memory_.GetVirtualAllocator().NewBuffer(bytes);
+
+    default:
+      break;
+  }
+
+  return Buffer::GetNull();
+}
+
+void System::DeleteBuffer(Buffer& buffer) {
+  if (buffer.IsNull()) return;
+
+  switch (buffer.GetMallocType()) {
+    case MallocType::kHost:
+      if (memory_.GetSystemType() != SystemType::kHost) break;
+      memory_.GetPhysicalAllocator().DeleteBuffer(buffer);
+      break;
+
+    case MallocType::kPinned:
+      if (memory_.GetSystemType() != SystemType::kHost) break;
+      memory_.GetVirtualAllocator().DeleteBuffer(buffer);
+      break;
+
+    case MallocType::kDevice:
+      if (memory_.GetSystemType() != SystemType::kDevice) break;
+      memory_.GetPhysicalAllocator().DeleteBuffer(buffer);
+      break;
+
+    case MallocType::kUnified:
+      if (memory_.GetSystemType() != SystemType::kDevice) break;
+      memory_.GetVirtualAllocator().DeleteBuffer(buffer);
+      break;
+
+    default:
+      break;
+  }
+}
 
 bool System::IsNull() const { return !(*this); }
 
