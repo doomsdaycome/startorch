@@ -2,7 +2,7 @@
 #define STARTORCH_ENGINE_BRIDGE_HPP_
 
 #include "startorch/common/types.hpp"
-#include "startorch/engine/system.hpp"
+#include "startorch/device/engine.hpp"
 
 namespace startorch {
 
@@ -11,7 +11,7 @@ class Bridge {
   Bridge();
   Bridge(Bridge&& other) noexcept = default;
   Bridge(const Bridge& other) = default;
-  Bridge(System& destination_system, const System& source_system);
+  Bridge(Engine& destination_engine, const Engine& source_engine);
 
   ~Bridge() = default;
 
@@ -20,10 +20,10 @@ class Bridge {
 
   explicit operator bool() const;
 
-  System& GetDestinationSystem();
-  const System& GetDestinationSystem() const;
-  System& GetSourceSystem();
-  const System& GetSourceSystem() const;
+  Engine& GetDestinationEngine();
+  const Engine& GetDestinationEngine() const;
+  Engine& GetSourceEngine();
+  const Engine& GetSourceEngine() const;
   BridgeType GetType() const;
 
   bool IsNull() const;
@@ -33,8 +33,8 @@ class Bridge {
   static Bridge& GetNull();
 
  private:
-  System* destination_system_data_;
-  const System* source_system_data_;
+  Engine* destination_engine_data_;
+  const Engine* source_engine_data_;
   BridgeType type_;
 };
 

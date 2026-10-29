@@ -10,7 +10,7 @@
 
 namespace startorch {
 
-enum class SystemType : std::uint8_t {
+enum class EngineType : std::uint8_t {
   kUndefined = 0,
 
   kHost = 1,
@@ -85,6 +85,14 @@ using CPPType = std::variant<std::monostate, bool, std::uint8_t, std::uint16_t,
                              float, double
 #endif
                              >;
+
+struct EngineSlot {
+  uint64_t index;
+  EngineType type;
+
+  EngineSlot();
+  EngineSlot(uint64_t index, EngineType type);
+};
 
 }  // namespace startorch
 

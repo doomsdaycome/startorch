@@ -1,33 +1,33 @@
-#ifndef STARTORCH_ENGINE_SYSTEM_HPP_
-#define STARTORCH_ENGINE_SYSTEM_HPP_
+#ifndef STARTORCH_DEVICE_SYSTEM_HPP_
+#define STARTORCH_DEVICE_SYSTEM_HPP_
 
 #include <cstdint>
+#include <unordered_map>
+#include <vector>
 
 #include "startorch/common/types.hpp"
-#include "startorch/engine/memory.hpp"
+#include "startorch/device/engine.hpp"
+#include "startorch/device/memory.hpp"
 #include "startorch/memory/buffer.hpp"
 
 namespace startorch {
 
 class System {
  public:
-  System();
-  System(System&& other) noexcept = delete;
-  System(const System& other) = delete;
-  System(std::uint64_t index, std::uint64_t physical_bytes,
-         std::uint64_t virtual_bytes, SystemType system_type);
+  System() = default;
+  System(System&& other) noexcept = default;
+  System(const System& other) = default;
 
   ~System() = default;
 
-  System& operator=(System&& other) noexcept = delete;
-  System& operator=(const System& other) = delete;
+  System& operator=(System&& other) noexcept = default;
+  System& operator=(const System& other) = default;
 
   explicit operator bool() const;
 
   std::uint64_t GetIndex() const;
   Memory& GetMemory();
   const Memory& GetMemory() const;
-  SystemType GetType() const;
 
   Buffer NewBuffer(std::uint64_t bytes, MallocType malloc_type);
   void DeleteBuffer(Buffer& buffer);
@@ -37,8 +37,7 @@ class System {
   static System& GetNull();
 
  private:
-  std::uint64_t index_;
-  Memory memory_;
+  std::unordered_map<EngineType, std::vector<Engine&>> engine_map_;
 };
 
 }  // namespace startorch

@@ -1,9 +1,13 @@
 #ifndef STARTORCH_COMMON_VARIABLES_HPP_
 #define STARTORCH_COMMON_VARIABLES_HPP_
 
-#include "startorch/engine/system.hpp"
+#include "startorch/device/engine.hpp"
+#include "startorch/device/system.hpp"
 
 namespace startorch {
+
+extern Engine kDefaultHostEngine;
+extern Engine kDefaultDeviceEngine;
 
 extern System kDefaultHostSystem;
 extern System kDefaultDeviceSystem;

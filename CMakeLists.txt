@@ -40,9 +40,10 @@ target_sources(
         src/startorch/memory/buffer.cpp
         src/startorch/common/utilities.cpp
         src/startorch/common/variables.cpp
-        src/startorch/engine/bridge.cpp
-        src/startorch/engine/memory.cpp
-        src/startorch/engine/system.cpp
+        src/startorch/device/bridge.cpp
+        src/startorch/device/memory.cpp
+        src/startorch/device/system.cpp
+        src/startorch/device/engine.cpp
         src/startorch/scalar/pointer.cpp
         src/startorch/scalar/reference.cpp
         src/startorch/scalar/value.cpp
@@ -97,7 +98,7 @@ if(BUILD_TESTS)
     add_executable(
         startorch_test
         tests/memory_test.cpp
-        tests/engine_test.cpp
+        tests/device_test.cpp
         tests/scalar_test.cpp
     )
 

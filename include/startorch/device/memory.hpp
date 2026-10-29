@@ -1,5 +1,5 @@
-#ifndef STARTORCH_ENGINE_MEMORY_HPP_
-#define STARTORCH_ENGINE_MEMORY_HPP_
+#ifndef STARTORCH_DEVICE_MEMORY_HPP_
+#define STARTORCH_DEVICE_MEMORY_HPP_
 
 #include <cstdint>
 
@@ -13,8 +13,8 @@ class Memory {
   Memory();
   Memory(Memory&& other) noexcept = delete;
   Memory(const Memory& other) = delete;
-  Memory(std::uint64_t physical_bytes, std::uint64_t virtual_bytes,
-         SystemType system_type);
+  Memory(std::uint64_t default_bytes, std::uint64_t virtual_bytes,
+         EngineType engine_type);
 
   ~Memory() = default;
 
@@ -23,22 +23,22 @@ class Memory {
 
   explicit operator bool() const;
 
-  Allocator& GetPhysicalAllocator();
-  const Allocator& GetPhysicalAllocator() const;
+  Allocator& GetDefaultAllocator();
+  const Allocator& GetDefaultAllocator() const;
   Allocator& GetVirtualAllocator();
   const Allocator& GetVirtualAllocator() const;
-  SystemType GetSystemType() const;
+  EngineType GetEngineType() const;
 
   bool IsNull() const;
 
   static Memory& GetNull();
 
  private:
-  Allocator physical_allocator_;
+  Allocator default_allocator_;
   Allocator virtual_allocator_;
-  SystemType system_type_;
+  EngineType engine_type_;
 };
 
 }  // namespace startorch
 
-#endif  // !STARTORCH_ENGINE_MEMORY_HPP_
+#endif  // !STARTORCH_DEVICE_MEMORY_HPP_

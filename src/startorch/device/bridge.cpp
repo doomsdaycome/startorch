@@ -1,4 +1,4 @@
-#include "startorch/engine/bridge.hpp"
+#include "startorch/device/bridge.hpp"
 
 #include <cuda_runtime_api.h>
 
@@ -7,60 +7,60 @@
 #include <cstring>
 
 #include "startorch/common/types.hpp"
-#include "startorch/engine/system.hpp"
+#include "startorch/device/engine.hpp"
 
 namespace startorch {
 
 Bridge::Bridge()
-    : destination_system_data_(nullptr),
-      source_system_data_(nullptr),
+    : destination_engine_data_(nullptr),
+      source_engine_data_(nullptr),
       type_(BridgeType::kUndefined) {}
 
-Bridge::Bridge(System& destination_system, const System& source_system)
-    : destination_system_data_(&destination_system),
-      source_system_data_(&source_system),
+Bridge::Bridge(Engine& destination_engine, const Engine& source_engine)
+    : destination_engine_data_(&destination_engine),
+      source_engine_data_(&source_engine),
       type_(BridgeType::kUndefined) {
-  if (destination_system_data_->IsNull() || source_system_data_->IsNull()) {
-    destination_system_data_ = nullptr;
-    source_system_data_ = nullptr;
+  if (destination_engine_data_->IsNull() || source_engine_data_->IsNull()) {
+    destination_engine_data_ = nullptr;
+    source_engine_data_ = nullptr;
     return;
   }
 
-  const SystemType destination_system_type =
-      destination_system_data_->GetType();
-  const SystemType source_system_type = source_system_data_->GetType();
+  const EngineType destination_engine_type =
+      destination_engine_data_->GetType();
+  const EngineType source_engine_type = source_engine_data_->GetType();
 
-  if (destination_system_type == SystemType::kHost) {
-    if (source_system_type == SystemType::kHost)
+  if (destination_engine_type == EngineType::kHost) {
+    if (source_engine_type == EngineType::kHost)
       type_ = BridgeType::kHostToHost;
-    else if (source_system_type == SystemType::kDevice)
+    else if (source_engine_type == EngineType::kDevice)
       type_ = BridgeType::kDeviceToHost;
-  } else if (destination_system_type == SystemType::kDevice) {
-    if (source_system_type == SystemType::kHost)
+  } else if (destination_engine_type == EngineType::kDevice) {
+    if (source_engine_type == EngineType::kHost)
       type_ = BridgeType::kHostToDevice;
-    else if (source_system_type == SystemType::kDevice)
+    else if (source_engine_type == EngineType::kDevice)
       type_ = BridgeType::kDeviceToDevice;
   }
 }
 
 Bridge::operator bool() const {
-  return destination_system_data_ && source_system_data_ &&
-         !destination_system_data_->IsNull() && !source_system_data_->IsNull();
+  return destination_engine_data_ && source_engine_data_ &&
+         !destination_engine_data_->IsNull() && !source_engine_data_->IsNull();
 }
 
-System& Bridge::GetDestinationSystem() {
-  if (destination_system_data_ == nullptr) return System::GetNull();
+Engine& Bridge::GetDestinationEngine() {
+  if (destination_engine_data_ == nullptr) return Engine::GetNull();
 
-  return *destination_system_data_;
+  return *destination_engine_data_;
 }
 
-const System& Bridge::GetDestinationSystem() const {
-  if (destination_system_data_ == nullptr) return System::GetNull();
+const Engine& Bridge::GetDestinationEngine() const {
+  if (destination_engine_data_ == nullptr) return Engine::GetNull();
 
-  return *destination_system_data_;
+  return *destination_engine_data_;
 }
 
-const System& Bridge::GetSourceSystem() const { return *source_system_data_; }
+const Engine& Bridge::GetSourceEngine() const { return *source_engine_data_; }
 BridgeType Bridge::GetType() const { return type_; }
 
 bool Bridge::IsNull() const { return !(*this); }
